@@ -1,0 +1,15 @@
+{
+    "keep": {
+        "days": true,
+        "amount": 30
+    },
+    "auditLog": "C:\\Users\\muham\\Projects\\portfolio\\be-portfolio\\logs\\.6a2d476d059ca706c711f7465793c13302604dcb-audit.json",
+    "files": [
+        {
+            "date": 1747623106087,
+            "name": "C:\\Users\\muham\\Projects\\portfolio\\be-portfolio\\logs\\access-log-2025-05-19.log",
+            "hash": "e46f3c637b81e2b13b1f8d8b01d32f8f5c3434e1e96631488a746e0a46793fdb"
+        }
+    ],
+    "hashType": "sha256"
+}
