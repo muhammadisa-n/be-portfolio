@@ -2,6 +2,9 @@ import express from "express";
 import { successResponse } from "../utils/response";
 import { authRouter } from "./auth-route";
 import { userRouter } from "./user-route";
+import { toolRouter } from "./tool-route";
+import { projectRouter } from "./project-route";
+import { messageRouter } from "./message-route";
 
 export const mainRouter = express.Router();
 
@@ -23,3 +26,6 @@ mainRouter.get("/api", (req, res) => {
 });
 mainRouter.use(authRouter);
 mainRouter.use(userRouter);
+mainRouter.use(toolRouter);
+mainRouter.use(projectRouter);
+mainRouter.use(messageRouter);

@@ -28,7 +28,7 @@ model Tool {
   image_id         String           @db.VarChar(200)
   image_url        String           @db.VarChar(300)
   tool_url         String           @db.VarChar(100)
-  dad              Int
+  dad              Int?
   created_at       DateTime         @default(now()) @db.Timestamp(0)
   updated_at       DateTime         @updatedAt @db.Timestamp(0)
   deleted_at       DateTime?        @db.Timestamp(0)
@@ -45,7 +45,7 @@ model Project {
   image_url        String           @db.VarChar(300)
   demo_url         String           @db.VarChar(100)
   project_url      String           @db.VarChar(100)
-  dad              Int
+  dad              Int?
   created_at       DateTime         @default(now()) @db.Timestamp(0)
   updated_at       DateTime         @updatedAt @db.Timestamp(0)
   deleted_at       DateTime?        @db.Timestamp(0)
