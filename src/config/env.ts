@@ -26,7 +26,7 @@ const envSchema = z.object({
 const _env = envSchema.safeParse(process.env);
 
 if (!_env.success) {
-  console.error("❌ ENV ERROR:", _env.error.format());
+  console.error("❌ ENV ERROR :", _env.error.format());
   process.exit(1);
 }
 
