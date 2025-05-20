@@ -11,7 +11,6 @@ import { Validation } from "../utils/validation";
 import * as argon2 from "argon2";
 import { listResponse, tolistResponse } from "../dtos/list-dto";
 import { UserRepository } from "../repositories/user-repository";
-import { env } from "../config/env";
 export class UserService {
   static async create(request: CreateUserRequest): Promise<UserResponse> {
     const data = Validation.validate(UserValidation.CREATE, request);

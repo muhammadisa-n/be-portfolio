@@ -125,7 +125,7 @@ const theme = new SwaggerTheme();
 const themeCss = theme.getBuffer("dark-monokai" as any);
 export function setupSwagger(app: Express) {
   app.use(
-    "/api/docs",
+    "/be-gateone/api/docs",
     swaggerUi.serve,
     swaggerUi.setup(swaggerSpec, {
       customCss: themeCss,

@@ -8,8 +8,9 @@ import dotenv from "dotenv";
 import { errorMiddleware } from "../middleware/error-middleware";
 import { httpLogger } from "../middleware/http-logger-middleware";
 import { errorResponse } from "../utils/response";
-import { setupSwagger } from "../utils/swagger";
+import { setupSwagger } from "./swagger";
 import { mainRouter } from "../routes/main-route";
+import fileUpload from "express-fileupload";
 
 dotenv.config();
 
@@ -24,14 +25,15 @@ export const web = express();
 web.use(express.json());
 web.use(cookieParser());
 web.use(cors({ credentials: true, origin: `${process.env.CLIENT_URL}` }));
-web.use(express.static("public"));
+web.use(fileUpload({ useTempFiles: true, tempFileDir: "./temp/" }));
+web.use("/be-portfolio", express.static("public"));
 web.use(httpLogger);
 
 // Swagger Setup
 setupSwagger(web);
 
 // Routes
-web.use(mainRouter);
+web.use("/be-portfolio", mainRouter);
 
 // 404 Handler
 web.use((req, res) => {
