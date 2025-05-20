@@ -14,7 +14,7 @@ const envSchema = z.object({
     .url({ message: "DATABASE_URL harus URL yang valid" }),
   BASE_URL: z.string().url(),
   BASE_API_URL: z.string().url(),
-  CLIENT_URL: z.string().url().optional(),
+  CLIENT_URL: z.string().url(),
   PORT: z.coerce.number().default(3000),
   JWT_SECRET: z.string(),
   APP_KEY: z.string(),

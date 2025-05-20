@@ -15,7 +15,8 @@
     "start": "node craft start",
     "dev": "node  craft dev",
     "build": "node craft build",
-    "test": "node craft run:test"
+    "test": "node craft run:test",
+    "pm2:restart": "node craft build && pm2 restart be-portfolio"
   },
   "jest": {
     "transform": {
