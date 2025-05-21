@@ -13,7 +13,7 @@ export class ToolRepository {
       },
       skip,
       take,
-      orderBy: { updated_at: "desc" },
+      orderBy: { created_at: "asc" },
     });
   }
 
