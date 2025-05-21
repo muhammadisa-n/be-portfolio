@@ -16,9 +16,6 @@ export class ProjectRepository {
 
     return createdProject;
   }
-  static async createtHasTool(data: any) {
-    return prismaClient.project.create({ data });
-  }
 
   static async findMany(filters: any, skip: number, take: number) {
     return prismaClient.project.findMany({
@@ -32,7 +29,7 @@ export class ProjectRepository {
       include: {
         project_has_tool: {
           include: {
-            tool: true,
+            tool: { select: { name: true } },
           },
         },
       },
