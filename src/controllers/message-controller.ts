@@ -7,6 +7,7 @@ import {
 } from "../utils/response";
 import { CreateMessageRequest, ListMessageRequest } from "../dtos/message-dto";
 import { MessageService } from "../services/message-service";
+import { sendEmail } from "../utils/sendEmail";
 
 export class MessageController {
   static async create(req: Request, res: Response, next: NextFunction) {
@@ -17,6 +18,7 @@ export class MessageController {
         message: req.body.message,
       };
       const response = await MessageService.create(request);
+      await sendEmail(response);
       res
         .status(201)
         .json(successResponse("Message Berhasil Terkirim", 201, response));

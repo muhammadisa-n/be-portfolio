@@ -22,7 +22,12 @@ export const web = express();
 // Middleware
 web.use(express.json());
 web.use(cookieParser());
-web.use(cors({ credentials: true, origin: `${env.CLIENT_URL}` }));
+web.use(
+  cors({
+    origin: env.CLIENT_URLS,
+    credentials: true,
+  })
+);
 web.use(fileUpload({ useTempFiles: true, tempFileDir: "./temp/" }));
 web.use("/be-portfolio", express.static("public"));
 web.use(httpLogger);

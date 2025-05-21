@@ -21,10 +21,10 @@ const customFormat = winston.format.printf(({ level, message, timestamp }) => {
       coloredLevel = chalk.greenBright.bold(level.toUpperCase());
       break;
     case "debug":
-      coloredLevel = chalk.bgBlueBright.bold(level.toUpperCase());
+      coloredLevel = chalk.blueBright.bold(level.toUpperCase());
       break;
     default:
-      coloredLevel = chalk.bgBlueBright.bold(level.toUpperCase());
+      coloredLevel = chalk.whiteBright.bold(level.toUpperCase());
       break;
   }
 
@@ -70,25 +70,48 @@ const plainFormat = winston.format.printf(({ timestamp, level, message }) => {
   return `[${timestamp}] ${level.toUpperCase()}: ${message}`;
 });
 
-// Format untuk CONSOLE logs — dengan warna
 const coloredHttpFormat = winston.format.printf(
   ({ timestamp, level, message }) => {
+    const msg = String(message);
+
     let coloredLevel = level.toUpperCase();
     switch (level) {
       case "error":
-        coloredLevel = chalk.red.bold(level.toUpperCase());
+        coloredLevel = chalk.redBright.bold(level.toUpperCase());
         break;
       case "warn":
-        coloredLevel = chalk.yellow.bold(level.toUpperCase());
+        coloredLevel = chalk.yellowBright.bold(level.toUpperCase());
         break;
       case "info":
-        coloredLevel = chalk.blue.bold(level.toUpperCase());
+        coloredLevel = chalk.greenBright.bold(level.toUpperCase());
+        break;
+      case "debug":
+        coloredLevel = chalk.blueBright.bold(level.toUpperCase());
         break;
       default:
-        coloredLevel = chalk.white(level.toUpperCase());
+        coloredLevel = chalk.whiteBright(level.toUpperCase());
         break;
     }
-    return `[${chalk.gray(timestamp)}] ${coloredLevel}: ${message}`;
+
+    // Pewarnaan method HTTP
+    const methodMatch = msg.match(/^(GET|POST|PUT|DELETE|PATCH|OPTIONS|HEAD)/);
+    const methodColors = {
+      GET: chalk.green.bold("GET"),
+      POST: chalk.cyan.bold("POST"),
+      PUT: chalk.yellow.bold("PUT"),
+      DELETE: chalk.red.bold("DELETE"),
+      PATCH: chalk.magenta.bold("PATCH"),
+      OPTIONS: chalk.white.bold("OPTIONS"),
+      HEAD: chalk.gray.bold("HEAD"),
+    } as const;
+
+    let coloredMessage = msg;
+    if (methodMatch) {
+      const method = methodMatch[0] as keyof typeof methodColors;
+      coloredMessage = msg.replace(method, methodColors[method]);
+    }
+
+    return `[${chalk.gray(timestamp)}] ${coloredLevel}: ${coloredMessage}`;
   }
 );
 

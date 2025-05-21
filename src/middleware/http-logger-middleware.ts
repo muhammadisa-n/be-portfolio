@@ -20,7 +20,7 @@ export const httpLogger = async (
       httpAccessLogger.info(logMessage);
     } else if (res.statusCode >= 400 && res.statusCode < 500) {
       httpAccessLogger.warn(logMessage);
-    } else if (res.statusCode >= 500) {
+    } else if (res.statusCode >= 500) { 
       httpAccessLogger.error(logMessage);
     } else {
       httpAccessLogger.debug(logMessage);
