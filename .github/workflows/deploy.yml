@@ -29,5 +29,6 @@ jobs:
             git config --global --add safe.directory /var/www/${{ secrets.VPS_USER }}/prod/be-portfolio
             git pull origin main
             npm install
+            node craft db:migrate
             npm run pm2:restart
           EOF
