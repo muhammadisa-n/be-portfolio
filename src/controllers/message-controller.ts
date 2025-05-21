@@ -17,7 +17,9 @@ export class MessageController {
         message: req.body.message,
       };
       const response = await MessageService.create(request);
-      res.status(201).json(successCreateResponse(response));
+      res
+        .status(201)
+        .json(successResponse("Message Berhasil Terkirim", 201, response));
     } catch (error) {
       next(error);
     }
