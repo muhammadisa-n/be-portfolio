@@ -75,3 +75,21 @@ model Message {
 
   @@map("messages")
 }
+
+model Image {
+  id        Int    @id @default(autoincrement())
+  name      String @db.VarChar(100)
+  image_id  String @db.VarChar(200)
+  image_url String @db.VarChar(300)
+
+  @@map("images")
+}
+
+model Translation {
+  id       Int    @id @default(autoincrement())
+  language String @db.VarChar(100)
+  key      String @db.VarChar(100)
+  value    String @db.Text()
+
+  @@map("translations")
+}
