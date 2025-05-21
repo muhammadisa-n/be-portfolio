@@ -3,7 +3,7 @@ import { prismaClient } from "../config/database";
 export class ProjectRepository {
   static async create(data: any, tool_ids: number[]) {
     const createdProject = await prismaClient.project.create({ data });
-    if (data.tool_ids.length > 0) {
+    if (tool_ids.length > 0) {
       await prismaClient.projectHasTool.createMany({
         data: tool_ids.map((toolId) => ({
           project_id: createdProject.id,
