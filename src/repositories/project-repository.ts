@@ -28,7 +28,7 @@ export class ProjectRepository {
       },
       skip,
       take,
-      orderBy: { created_at: "asc" },
+      orderBy: { updated_at: "desc" },
       include: {
         project_has_tool: {
           include: {
