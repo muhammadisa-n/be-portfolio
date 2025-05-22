@@ -5,6 +5,7 @@ import { userRouter } from "./user-route";
 import { toolRouter } from "./tool-route";
 import { projectRouter } from "./project-route";
 import { messageRouter } from "./message-route";
+import { translationRouter } from "./translation-route";
 
 export const mainRouter = express.Router();
 
@@ -29,3 +30,4 @@ mainRouter.use(userRouter);
 mainRouter.use(toolRouter);
 mainRouter.use(projectRouter);
 mainRouter.use(messageRouter);
+mainRouter.use(translationRouter);
