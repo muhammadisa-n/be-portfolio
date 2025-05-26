@@ -1,3 +1,3 @@
 # BE-PORTFOLIO
 
-link fe :  [portfolio](https://github.com/muhammadisa-n/portfolio)
+link fe : [fe-portfolio](https://github.com/muhammadisa-n/fe-portfolio)
