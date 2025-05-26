@@ -9,7 +9,7 @@ import {
 import { ProjectValidation } from "../validations/project-validation";
 import { listResponse, tolistResponse } from "../dtos/list-dto";
 import { ResponseError } from "../utils/response-error";
-import { uploadImageProjects } from "../utils/upload-image";
+import { uploadImageProjects } from "../utils/upload";
 import { UploadedFile } from "express-fileupload";
 import { cloudinary } from "../config/cloudinary";
 import { ProjectRepository } from "../repositories/project-repository";

@@ -76,15 +76,6 @@ model Message {
   @@map("messages")
 }
 
-model Image {
-  id        Int    @id @default(autoincrement())
-  name      String @db.VarChar(100)
-  image_id  String @db.VarChar(200)
-  image_url String @db.VarChar(300)
-
-  @@map("images")
-}
-
 model Translation {
   id       Int    @id @default(autoincrement())
   language String @db.VarChar(100)
@@ -92,4 +83,17 @@ model Translation {
   value    String @db.Text()
 
   @@map("translations")
+}
+
+model File {
+  id         Int       @id @default(autoincrement())
+  filename   String    @db.VarChar(100)
+  file_id    String    @db.VarChar(100)
+  file_url   String    @db.VarChar(300)
+  mimetype   String    @db.VarChar(300)
+  created_at DateTime  @default(now()) @db.Timestamp(0)
+  updated_at DateTime  @updatedAt @db.Timestamp(0)
+  deleted_at DateTime? @db.Timestamp(0)
+
+  @@map("files")
 }

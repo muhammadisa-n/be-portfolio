@@ -14,7 +14,7 @@ import {
 } from "../dtos/tool-dto";
 import { ToolService } from "../services/tool-service";
 import { UploadedFile } from "express-fileupload";
-import { validateImageFile } from "../utils/upload-image";
+import { validateImageFile } from "../utils/upload";
 import fs from "fs";
 
 export class ToolController {

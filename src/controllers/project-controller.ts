@@ -13,7 +13,7 @@ import {
   UpdateProjectRequest,
 } from "../dtos/project-dto";
 import { UploadedFile } from "express-fileupload";
-import { validateImageFile } from "../utils/upload-image";
+import { validateImageFile } from "../utils/upload";
 import fs from "fs";
 import { ProjectService } from "../services/project-service";
 

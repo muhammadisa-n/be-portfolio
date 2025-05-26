@@ -9,7 +9,7 @@ import {
 import { ToolValidation } from "../validations/tool-validation";
 import { listResponse, tolistResponse } from "../dtos/list-dto";
 import { ResponseError } from "../utils/response-error";
-import { uploadImageTools } from "../utils/upload-image";
+import { uploadImageTools } from "../utils/upload";
 import { UploadedFile } from "express-fileupload";
 import { cloudinary } from "../config/cloudinary";
 import { ToolRepository } from "../repositories/tool-repository";
