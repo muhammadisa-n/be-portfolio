@@ -29,14 +29,14 @@ web.use(
   })
 );
 web.use(fileUpload({ useTempFiles: true, tempFileDir: "./temp/" }));
-web.use("/be-portfolio", express.static("public"));
+web.use(express.static("public"));
 web.use(httpLogger);
 
 // Swagger Setup
 setupSwagger(web);
 
 // Routes
-web.use("/be-portfolio", mainRouter);
+web.use(mainRouter);
 
 // 404 Handler
 web.use((req, res) => {
