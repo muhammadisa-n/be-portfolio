@@ -44,6 +44,13 @@ export class ProjectRepository {
       },
     });
   }
+  static async countAll() {
+    return prismaClient.project.count({
+      where: {
+        deleted_at: null,
+      },
+    });
+  }
 
   static async findById(id: number) {
     return prismaClient.project.findUnique({ where: { id } });

@@ -6,10 +6,38 @@ import { ToolController } from "../controllers/tool-controller";
 
 export const toolRouter = express.Router();
 
-toolRouter.get("/api/tools", ToolController.getAll);
-toolRouter.get("/api/tools/:id", ToolController.getOne);
-toolRouter.post("/api/tools", ToolController.create);
-toolRouter.put("/api/tools/:id", ToolController.update);
-toolRouter.patch("/api/tools/:id/delete", ToolController.softDelete);
-toolRouter.patch("/api/tools/:id/restore", ToolController.restoreData);
-toolRouter.delete("/api/tools/:id", ToolController.hardDelete);
+toolRouter.get(
+  "/api/tools",
+  asyncHandler(authMiddleware),
+  ToolController.getAll
+);
+toolRouter.get(
+  "/api/tools/:id",
+  asyncHandler(authMiddleware),
+  ToolController.getOne
+);
+toolRouter.post(
+  "/api/tools",
+  asyncHandler(authMiddleware),
+  ToolController.create
+);
+toolRouter.put(
+  "/api/tools/:id",
+  asyncHandler(authMiddleware),
+  ToolController.update
+);
+toolRouter.patch(
+  "/api/tools/:id/delete",
+  asyncHandler(authMiddleware),
+  ToolController.softDelete
+);
+toolRouter.patch(
+  "/api/tools/:id/restore",
+  asyncHandler(authMiddleware),
+  ToolController.restoreData
+);
+toolRouter.delete(
+  "/api/tools/:id",
+  asyncHandler(authMiddleware),
+  ToolController.hardDelete
+);

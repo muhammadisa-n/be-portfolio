@@ -7,9 +7,33 @@ import { MessageController } from "../controllers/message-controller";
 export const messageRouter = express.Router();
 
 // Example routes:
-messageRouter.get("/api/messages", MessageController.getAll);
-messageRouter.get("/api/messages/:id", MessageController.getOne);
-messageRouter.post("/api/messages", MessageController.create);
-messageRouter.patch("/api/messages/:id/delete", MessageController.softDelete);
-messageRouter.patch("/api/messages/:id/restore", MessageController.restoreData);
-messageRouter.delete("/api/messages/:id", MessageController.hardDelete);
+messageRouter.get(
+  "/api/messages",
+  asyncHandler(authMiddleware),
+  MessageController.getAll
+);
+messageRouter.get(
+  "/api/messages/:id",
+  asyncHandler(authMiddleware),
+  MessageController.getOne
+);
+messageRouter.post(
+  "/api/messages",
+  asyncHandler(authMiddleware),
+  MessageController.create
+);
+messageRouter.patch(
+  "/api/messages/:id/delete",
+  asyncHandler(authMiddleware),
+  MessageController.softDelete
+);
+messageRouter.patch(
+  "/api/messages/:id/restore",
+  asyncHandler(authMiddleware),
+  MessageController.restoreData
+);
+messageRouter.delete(
+  "/api/messages/:id",
+  asyncHandler(authMiddleware),
+  MessageController.hardDelete
+);

@@ -130,4 +130,12 @@ export class ProjectController {
       next(e);
     }
   }
+  static async count(req: Request, res: Response, next: NextFunction) {
+    try {
+      const data = await ProjectService.count();
+      res.status(200).json(successResponse("Berhasil Count Data", 200, data));
+    } catch (e) {
+      next(e);
+    }
+  }
 }

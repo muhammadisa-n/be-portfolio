@@ -138,4 +138,12 @@ export class ProjectService {
     }
     await ProjectRepository.hardDelete(id);
   }
+
+  static async count() {
+    const data = await ProjectRepository.countAll();
+    if (!data) {
+      throw new ResponseError(404, "Data Tidak Ditemukan");
+    }
+    return data;
+  }
 }

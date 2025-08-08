@@ -1,12 +1,11 @@
 import express from "express";
-import { successResponse } from "../utils/response";
 import { authRouter } from "./auth-route";
 import { userRouter } from "./user-route";
 import { toolRouter } from "./tool-route";
 import { projectRouter } from "./project-route";
 import { messageRouter } from "./message-route";
-import { translationRouter } from "./translation-route";
 import { fileRouter } from "./file-route";
+import { publicRouter } from "./public-route";
 
 export const mainRouter = express.Router();
 
@@ -41,5 +40,5 @@ mainRouter.use(userRouter);
 mainRouter.use(toolRouter);
 mainRouter.use(projectRouter);
 mainRouter.use(messageRouter);
-mainRouter.use(translationRouter);
 mainRouter.use(fileRouter);
+mainRouter.use(publicRouter);
