@@ -17,13 +17,23 @@ export const mainRouter = express.Router();
 mainRouter.get("/", (req, res) => {
   res
     .status(200)
-    .json(successResponse(`${process.env.APP_NAME}  is running`, 200))
+    .json({
+      app_name: process.env.APP_NAME,
+      message: "Server its Running  🚀 ",
+      author: "Muhammad Isa",
+      status_code: 200,
+    })
     .end();
 });
 mainRouter.get("/api", (req, res) => {
   res
     .status(200)
-    .json(successResponse(`${process.env.APP_NAME} api is running`, 200))
+    .json({
+      app_name: process.env.APP_NAME,
+      message: "Api its Running  🚀 ",
+      author: "Muhammad Isa",
+      status_code: 200,
+    })
     .end();
 });
 mainRouter.use(authRouter);
