@@ -32,9 +32,6 @@ web.use(fileUpload({ useTempFiles: true, tempFileDir: "./temp/" }));
 web.use(express.static("public"));
 web.use(httpLogger);
 
-// Swagger Setup
-setupSwagger(web);
-
 // Routes
 web.use(mainRouter);
 
