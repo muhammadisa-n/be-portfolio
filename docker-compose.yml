@@ -1,0 +1,8 @@
+services:
+  be-portfolio:
+    container_name: be-portfolio
+    image: be_portfolio_image
+    build: .
+    ports:
+      - "16000:16000"
+    restart: always
