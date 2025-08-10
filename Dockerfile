@@ -1,8 +1,6 @@
 FROM node:22-slim AS base
 
 # Install timezone data
-RUN apt-get update && apt-get install -y tzdata
-
 RUN apt-get update && apt-get install -y tzdata openssl
 
 # Set timezone
