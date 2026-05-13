@@ -5,7 +5,7 @@ function Build() {
 
   try {
     execSync(
-      "npx tsc && cp -r src/views dist/views && cp -r public dist/public",
+      "npx tsc && cp -r src/views build/views && cp -r public build/public",
       { stdio: "inherit" }
     );
     console.log(chalk.green("✅ Build completed successfully."));

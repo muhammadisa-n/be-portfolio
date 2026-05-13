@@ -4,7 +4,7 @@ const fs = require("fs");
 const path = require("path");
 
 function Start() {
-  const entryPoint = path.resolve("dist/main.js");
+  const entryPoint = path.resolve("build/main.js");
 
   if (!fs.existsSync(entryPoint)) {
     console.error(

@@ -11,9 +11,12 @@ export const authMiddleware = async (
   res: Response,
   next: NextFunction
 ) => {
-  const refreshToken = req.cookies.refresh_token;
-  if (!refreshToken) {
-    throw new ResponseError(401, "Unauthorized: Anda Belum Login.");
+  const appKey = req.get("x-app-key");
+  if (!appKey) {
+    throw new ResponseError(401, "Unauthorized: App Key Invalid.");
+  }
+  if (appKey !== env.APP_KEY) {
+    throw new ResponseError(401, "Unauthorized: App Key Invalid.");
   }
   const token = req.get("Authorization")?.split(" ")[1];
   if (!token) {

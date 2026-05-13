@@ -33,7 +33,7 @@ web.use(express.static("public"));
 web.use(httpLogger);
 
 // Routes
-web.use(mainRouter);
+web.use("/portfolio", mainRouter);
 
 // 404 Handler
 web.use((req, res) => {
