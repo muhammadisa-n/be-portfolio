@@ -57,6 +57,10 @@ async function main() {
       { language: "en", key: "linkHome1", value: "Download CV" },
       { language: "id", key: "linkHome2", value: "Lihat Proyek" },
       { language: "en", key: "linkHome2", value: "See Projects" },
+      { language: "id", key: "projecta1", value: "Demo Langsung" },
+      { language: "en", key: "projecta1", value: "Live Demo" },
+      { language: "id", key: "projecta2", value: "Link Proyek" },
+      { language: "en", key: "projecta2", value: "Project Link" },
       {
         language: "id",
         key: "aboutP1",
