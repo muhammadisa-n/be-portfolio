@@ -20,24 +20,6 @@ import { prismaClient } from "../config/database";
 import { env } from "../config/env";
 
 export class AuthService {
-  static async register(request: CreateUserRequest): Promise<UserResponse> {
-    const data = Validation.validate(UserValidation.REGISTER, request);
-    const emailExits = await UserRepository.countByEmail(data.email);
-
-    if (emailExits != 0) {
-      throw new ResponseError(409, "Akun Sudah Terdaftar!");
-    }
-
-    data.password = await argon2.hash(data.password);
-
-    const response = await UserRepository.create({
-      fullName: data.fullName,
-      email: data.email,
-      password: data.password,
-    });
-    return toUserResponse(response);
-  }
-
   static async login(request: loginRequest) {
     const data = Validation.validate(UserValidation.LOGIN, request);
     const userExits = await UserRepository.findUserByEmail(data.email);

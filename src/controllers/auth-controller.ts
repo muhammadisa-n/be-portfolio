@@ -1,25 +1,11 @@
 import { NextFunction, Request, Response } from "express";
-import {
-  loginRequest,
-  CreateUserRequest,
-  UpdateUserRequest,
-} from "../dtos/user-dto";
+import { loginRequest, UpdateUserRequest } from "../dtos/user-dto";
 import { successResponse, successUpdateResponse } from "../utils/response";
 import { AuthService } from "../services/auth-service";
 import { UserRequest } from "../types/type-request";
 import { env } from "../config/env";
 
 export class AuthController {
-  static async register(req: Request, res: Response, next: NextFunction) {
-    try {
-      const request: CreateUserRequest = req.body as CreateUserRequest;
-      const response = await AuthService.register(request);
-      res.status(201).json(successResponse("Register Berhasil", 201, response));
-    } catch (error) {
-      next(error);
-    }
-  }
-
   static async login(req: Request, res: Response, next: NextFunction) {
     try {
       const request: loginRequest = req.body as loginRequest;
