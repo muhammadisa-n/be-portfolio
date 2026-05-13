@@ -82,6 +82,7 @@ model Translation {
   key      String @db.VarChar(100)
   value    String @db.Text()
 
+  @@unique([language, key], name: "language_key")
   @@map("translations")
 }
 

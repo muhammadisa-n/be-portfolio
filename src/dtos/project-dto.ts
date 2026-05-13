@@ -1,8 +1,10 @@
 import { Project } from "@prisma/client";
 
 export type CreateProjectRequest = {
-  name: string;
-  description: string;
+  name_en: string;
+  name_id?: string;
+  description_en: string;
+  description_id?: string;
   demo_url: string;
   project_url: string;
   dad?: number;
@@ -10,8 +12,10 @@ export type CreateProjectRequest = {
 };
 
 export type UpdateProjectRequest = {
-  name?: string;
-  description?: string;
+  name_en: string;
+  name_id?: string;
+  description_en: string;
+  description_id?: string;
   demo_url?: string;
   project_url?: string;
   dad?: number;

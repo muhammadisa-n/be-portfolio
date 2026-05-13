@@ -21,8 +21,10 @@ export class ProjectController {
   static async create(req: Request, res: Response, next: NextFunction) {
     try {
       const request: CreateProjectRequest = {
-        name: req.body.name,
-        description: req.body.description,
+        name_en: req.body.name_en,
+        name_id: req.body.name_id,
+        description_en: req.body.description_en,
+        description_id: req.body.description_id,
         demo_url: req.body.demo_url,
         project_url: req.body.project_url,
         dad: req.body.dad,
@@ -80,8 +82,10 @@ export class ProjectController {
   static async update(req: Request, res: Response, next: NextFunction) {
     try {
       const request: UpdateProjectRequest = {
-        name: req.body.name,
-        description: req.body.description,
+        name_en: req.body.name_en,
+        name_id: req.body.name_id,
+        description_en: req.body.description_en,
+        description_id: req.body.description_id,
         demo_url: req.body.demo_url,
         project_url: req.body.project_url,
         dad: req.body.dad,

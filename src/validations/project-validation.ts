@@ -2,23 +2,48 @@ import { z, ZodType } from "zod";
 
 export class ProjectValidation {
   static readonly CREATE: ZodType = z.object({
-    name: z.preprocess(
+    name_en: z.preprocess(
       (v) => (v === null ? undefined : v),
       z
         .string({
-          required_error: "Nama Wajib Diisi",
+          required_error: "Nama Eng Wajib Diisi",
         })
-        .min(1, { message: "Nama Tidak Boleh Kosong" })
-        .max(100, { message: "Nama Maksimal 100 Karakter" })
+        .min(1, { message: "Nama  Eng Tidak Boleh Kosong" })
+        .max(100, { message: "Nama Eng Maksimal 100 Karakter" })
     ),
-    description: z.preprocess(
+    name_id: z
+      .preprocess(
+        (v) => (v === null ? undefined : v),
+        z
+          .string({
+            required_error: "Nama ID Wajib Diisi",
+          })
+          .min(1, { message: "Nama ID Tidak Boleh Kosong" })
+          .max(100, { message: "Nama ID Maksimal 100 Karakter" })
+      )
+      .nullable()
+      .optional(),
+    description_en: z.preprocess(
       (v) => (v === null ? undefined : v),
       z
         .string({
-          required_error: "Deskripsi Wajib Diisi",
+          required_error: "Deskripsi Eng Wajib Diisi",
         })
-        .min(1, { message: "Deskripsi Tidak Boleh Kosong" })
+        .min(1, { message: "Deskripsi  Eng Tidak Boleh Kosong" })
+        .max(100, { message: "Deskripsi Eng Maksimal 100 Karakter" })
     ),
+    description_id: z
+      .preprocess(
+        (v) => (v === null ? undefined : v),
+        z
+          .string({
+            required_error: "Deskripsi ID Wajib Diisi",
+          })
+          .min(1, { message: "Deskripsi ID Tidak Boleh Kosong" })
+          .max(100, { message: "Deskripsi ID Maksimal 100 Karakter" })
+      )
+      .nullable()
+      .optional(),
     demo_url: z.preprocess(
       (v) => (v === null ? undefined : v),
       z
@@ -59,8 +84,10 @@ export class ProjectValidation {
     ),
   });
   static readonly UPDATE: ZodType = z.object({
-    name: z.string().optional(),
-    description: z.string().optional(),
+    name_en: z.string().optional(),
+    name_id: z.string().optional(),
+    description_en: z.string().optional(),
+    description_id: z.string().optional(),
     tool_url: z.string().optional(),
     demo_url: z.string().optional(),
     project_url: z.string().optional(),

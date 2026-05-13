@@ -1,4 +1,5 @@
 import { prismaClient } from "../config/database";
+import { ResponseError } from "../utils/response-error";
 
 export class ProjectRepository {
   static async create(data: any, tool_ids: number[]) {
@@ -16,7 +17,90 @@ export class ProjectRepository {
 
     return createdProject;
   }
+  static async createWithTranslation(data: {
+    name_en: string;
+    description_en: string;
+    name_id?: string;
+    description_id?: string;
+    demo_url: string;
+    project_url: string;
+    dad?: number;
+    tool_ids: number[];
+    image_id: string;
+    image_url: string;
+  }) {
+    return prismaClient.$transaction(async (tx) => {
+      const createdProject = await tx.project.create({
+        data: {
+          name: "TEMP_NAME",
+          description: "TEMP_DESCRIPTION",
+          demo_url: data.demo_url,
+          project_url: data.project_url,
+          dad: data.dad,
+          image_id: data.image_id,
+          image_url: data.image_url,
+        },
+      });
 
+      const nameKey = `projects.${createdProject.id}.name`;
+      const descriptionKey = `projects.${createdProject.id}.description`;
+
+      const updatedProject = await tx.project.update({
+        where: {
+          id: createdProject.id,
+        },
+        data: {
+          name: nameKey,
+          description: descriptionKey,
+        },
+      });
+
+      const translations = [
+        {
+          language: "en",
+          key: nameKey,
+          value: data.name_en,
+        },
+        {
+          language: "en",
+          key: descriptionKey,
+          value: data.description_en,
+        },
+      ];
+
+      if (data.name_id?.trim()) {
+        translations.push({
+          language: "id",
+          key: nameKey,
+          value: data.name_id.trim(),
+        });
+      }
+
+      if (data.description_id?.trim()) {
+        translations.push({
+          language: "id",
+          key: descriptionKey,
+          value: data.description_id.trim(),
+        });
+      }
+
+      await tx.translation.createMany({
+        data: translations,
+      });
+
+      if (data.tool_ids.length > 0) {
+        await tx.projectHasTool.createMany({
+          data: data.tool_ids.map((toolId) => ({
+            project_id: createdProject.id,
+            tool_id: toolId,
+          })),
+          skipDuplicates: true,
+        });
+      }
+
+      return updatedProject;
+    });
+  }
   static async findMany(filters: any, skip: number, take: number) {
     return prismaClient.project.findMany({
       where: {
@@ -77,6 +161,164 @@ export class ProjectRepository {
     }
 
     return updatedProject;
+  }
+
+  static async updateWithTransaction(
+    id: number,
+    data: {
+      name_en?: string;
+      name_id?: string;
+      description_en?: string;
+      description_id?: string;
+      demo_url?: string;
+      project_url?: string;
+      dad?: number | null;
+      image_id?: string;
+      image_url?: string;
+      tool_ids?: number[];
+    }
+  ) {
+    return prismaClient.$transaction(
+      async (tx) => {
+        const project = await tx.project.findUnique({
+          where: { id },
+        });
+
+        if (!project) {
+          throw new ResponseError(404, "Project tidak ditemukan");
+        }
+
+        const updateProjectData: any = {};
+
+        if (data.demo_url !== undefined) {
+          updateProjectData.demo_url = data.demo_url;
+        }
+
+        if (data.project_url !== undefined) {
+          updateProjectData.project_url = data.project_url;
+        }
+
+        if (data.dad !== undefined) {
+          updateProjectData.dad = data.dad;
+        }
+
+        if (data.image_id !== undefined) {
+          updateProjectData.image_id = data.image_id;
+        }
+
+        if (data.image_url !== undefined) {
+          updateProjectData.image_url = data.image_url;
+        }
+
+        const updatedProject = await tx.project.update({
+          where: { id },
+          data: updateProjectData,
+        });
+
+        const nameKey = project.name;
+        const descriptionKey = project.description;
+
+        if (data.name_en?.trim()) {
+          await tx.translation.upsert({
+            where: {
+              language_key: {
+                language: "en",
+                key: nameKey,
+              },
+            },
+            update: {
+              value: data.name_en.trim(),
+            },
+            create: {
+              language: "en",
+              key: nameKey,
+              value: data.name_en.trim(),
+            },
+          });
+        }
+
+        if (data.description_en?.trim()) {
+          await tx.translation.upsert({
+            where: {
+              language_key: {
+                language: "en",
+                key: descriptionKey,
+              },
+            },
+            update: {
+              value: data.description_en.trim(),
+            },
+            create: {
+              language: "en",
+              key: descriptionKey,
+              value: data.description_en.trim(),
+            },
+          });
+        }
+
+        if (data.name_id?.trim()) {
+          await tx.translation.upsert({
+            where: {
+              language_key: {
+                language: "id",
+                key: nameKey,
+              },
+            },
+            update: {
+              value: data.name_id.trim(),
+            },
+            create: {
+              language: "id",
+              key: nameKey,
+              value: data.name_id.trim(),
+            },
+          });
+        }
+
+        if (data.description_id?.trim()) {
+          await tx.translation.upsert({
+            where: {
+              language_key: {
+                language: "id",
+                key: descriptionKey,
+              },
+            },
+            update: {
+              value: data.description_id.trim(),
+            },
+            create: {
+              language: "id",
+              key: descriptionKey,
+              value: data.description_id.trim(),
+            },
+          });
+        }
+
+        if (Array.isArray(data.tool_ids)) {
+          await tx.projectHasTool.deleteMany({
+            where: {
+              project_id: id,
+            },
+          });
+
+          if (data.tool_ids.length > 0) {
+            await tx.projectHasTool.createMany({
+              data: data.tool_ids.map((toolId) => ({
+                project_id: id,
+                tool_id: toolId,
+              })),
+              skipDuplicates: true,
+            });
+          }
+        }
+
+        return updatedProject;
+      },
+      {
+        timeout: 15000,
+        maxWait: 10000,
+      }
+    );
   }
 
   static async softDelete(id: number) {

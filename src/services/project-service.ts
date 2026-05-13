@@ -20,18 +20,18 @@ export class ProjectService {
   ): Promise<ProjectResponse> {
     const data = Validation.validate(ProjectValidation.CREATE, request);
     const imageUpload = await uploadImageProjects(file);
-    const response = await ProjectRepository.create(
-      {
-        name: data.name,
-        description: data.description,
-        demo_url: data.demo_url,
-        project_url: data.project_url,
-        dad: data.dad,
-        image_id: imageUpload.public_id,
-        image_url: imageUpload.secure_url,
-      },
-      data.tool_ids
-    );
+    const response = await ProjectRepository.createWithTranslation({
+      name_en: data.name_en,
+      name_id: data.name_id,
+      description_en: data.description_en,
+      description_id: data.description_id,
+      demo_url: data.demo_url,
+      project_url: data.project_url,
+      dad: data.dad,
+      image_id: imageUpload.public_id,
+      image_url: imageUpload.secure_url,
+      tool_ids: data.tool_ids,
+    });
     return toProjectResponse(response);
   }
 
@@ -98,19 +98,18 @@ export class ProjectService {
       image_url = imageUpload.secure_url;
     }
 
-    const updated = await ProjectRepository.update(
-      id,
-      {
-        name: data.name ?? existingProject.name,
-        description: data.description ?? existingProject.description,
-        demo_url: data.demo_url ?? existingProject.demo_url,
-        project_url: data.project_url ?? existingProject.project_url,
-        dad: data.dad ?? existingProject.dad,
-        image_id,
-        image_url,
-      },
-      data.tool_ids
-    );
+    const updated = await ProjectRepository.updateWithTransaction(id, {
+      name_en: data.name_en,
+      name_id: data.name_id,
+      description_en: data.description_en,
+      description_id: data.description_id,
+      demo_url: data.demo_url,
+      project_url: data.project_url,
+      dad: data.dad,
+      image_id: image_id,
+      image_url: image_url,
+      tool_ids: data.tool_ids,
+    });
 
     return toProjectResponse(updated);
   }
