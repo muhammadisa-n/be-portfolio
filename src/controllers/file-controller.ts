@@ -22,27 +22,36 @@ export class FileController {
       next(error);
     }
   }
-  static async download(req: Request, res: Response, next: NextFunction) {
+  static async download(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
     try {
-      const filename = req.params.id;
-      const file = await FileService.download(filename);
+      const id = parseInt(req.params.id);
+
+      const file = await FileService.download(id);
 
       if (!file) {
         res.status(404).json(errorResponse("File tidak ditemukan", 404));
+        return;
       }
 
-      const extension = file!.mimetype.split("/")[1];
+      const extension = file.mimetype.split("/")[1];
+
       const fullPath = path.join(
-        __dirname,
-        "../../public/uploads/files",
-        file!.file_id
+        process.cwd(),
+        "public",
+        file.file_url.replace(/^\/+/, "")
       );
-      const downloadName = `${file!.filename}.${extension}`;
+
+      const downloadName = `${file.filename}.${extension}`;
 
       if (!fs.existsSync(fullPath)) {
         res
           .status(404)
           .json(errorResponse("File tidak ditemukan di server", 404));
+        return;
       }
 
       res.download(fullPath, downloadName);

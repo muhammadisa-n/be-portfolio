@@ -21,12 +21,12 @@ export class FileService {
     return response;
   }
 
-  static async download(filename: string) {
-    if (!filename) {
+  static async download(id: number) {
+    if (!id) {
       throw new ResponseError(404, "FIlename Tidak Ada");
     }
 
-    const response = await FileRepository.findByFilename(filename);
+    const response = await FileRepository.findByFilename(id);
     return response;
   }
 }

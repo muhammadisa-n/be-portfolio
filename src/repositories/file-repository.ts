@@ -5,10 +5,10 @@ export class FileRepository {
     return await prismaClient.file.create({ data });
   }
 
-  static async findByFilename(filename: string) {
+  static async findByFilename(id: number) {
     return await prismaClient.file.findFirst({
       where: {
-        filename: filename,
+        id: id,
         deleted_at: null,
       },
     });
