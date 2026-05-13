@@ -1,8 +1,8 @@
 import express from "express";
 import { asyncHandler } from "../utils/async-handler";
 import { authMiddleware } from "../middleware/auth-middleware";
-
 import { ToolController } from "../controllers/tool-controller";
+import { apiKeyMiddleware } from "../middleware/api-key-middleware";
 
 export const toolRouter = express.Router();
 
