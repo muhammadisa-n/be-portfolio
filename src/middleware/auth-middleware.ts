@@ -11,13 +11,6 @@ export const authMiddleware = async (
   res: Response,
   next: NextFunction
 ) => {
-  const appKey = req.get("x-api-key");
-  if (!appKey) {
-    throw new ResponseError(401, "Unauthorized: App Key Invalid.");
-  }
-  if (appKey !== env.APP_KEY) {
-    throw new ResponseError(401, "Unauthorized: App Key Invalid.");
-  }
   const token = req.get("Authorization")?.split(" ")[1];
   if (!token) {
     return res

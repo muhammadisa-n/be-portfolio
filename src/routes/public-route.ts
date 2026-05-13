@@ -5,7 +5,11 @@ import { MessageController } from "../controllers/message-controller";
 import { ToolController } from "../controllers/tool-controller";
 import { FileController } from "../controllers/file-controller";
 import { TranslationController } from "../controllers/translation-controller";
+import { apiKeyMiddleware } from "../middleware/api-key-middleware";
+
 export const publicRouter = express.Router();
+
+publicRouter.use(apiKeyMiddleware);
 
 // Example routes:
 publicRouter.get("/api/public/projects", ProjectController.getAll);
