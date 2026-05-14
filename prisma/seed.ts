@@ -302,7 +302,7 @@ async function main() {
         dad: 500,
         sort_order: 3,
         type: "framework",
-        show: true,
+        show: false,
       },
       {
         name: "Next JS",
@@ -440,7 +440,7 @@ async function main() {
         image_url:
           "https://res.cloudinary.com/dahdvag/image/upload/v1778744345/portfolio/tools-images/bpsoipznbpr4h3jta8tw.png",
         tool_url: "https://www.postman.com/",
-        dad: 100,
+        dad: 700,
         sort_order: 5,
         type: "tools",
         show: true,
@@ -452,7 +452,7 @@ async function main() {
         image_url:
           "https://res.cloudinary.com/dahdvag/image/upload/v1778693965/portfolio/tools-images/ltxftr0f1oofbhx2ggwp.png",
         tool_url: "https://code.visualstudio.com/",
-        dad: 200,
+        dad: 800,
         sort_order: 5,
         type: "tools",
         show: true,
