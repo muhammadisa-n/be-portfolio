@@ -172,6 +172,18 @@ async function main() {
         show: true,
       },
       {
+        name: "Python",
+        description: "Python",
+        image_id: "portfolio/tools-images/edznrjbcjumm9fqubvkd",
+        image_url:
+          "https://res.cloudinary.com/dahdvag/image/upload/v1778743850/portfolio/tools-images/edznrjbcjumm9fqubvkd.png",
+        tool_url: "https://www.python.org/",
+        dad: 300,
+        sort_order: 1,
+        type: "language",
+        show: true,
+      },
+      {
         name: "Typescript",
         description: "Typescript",
         image_id: "portfolio/tools-images/g4q0uruew8lqegi7kxzl",
@@ -179,9 +191,11 @@ async function main() {
           "https://res.cloudinary.com/dahdvag/image/upload/v1778693965/portfolio/tools-images/g4q0uruew8lqegi7kxzl.png",
         tool_url:
           "https://developer.mozilla.org/en-US/docs/Glossary/TypeScript",
-        dad: 200,
+        dad: 400,
+        sort_order: 1,
+        type: "language",
+        show: true,
       },
-
       {
         name: "Node JS",
         description: "Node JS",
@@ -189,61 +203,10 @@ async function main() {
         image_url:
           "https://res.cloudinary.com/dahdvag/image/upload/v1778693965/portfolio/tools-images/kcgbw9muancivohovtco.png",
         tool_url: "https://nodejs.org/",
-        dad: 400,
-      },
-      {
-        name: "Tailwind CSS",
-        description: "Tailwind CSS",
-        image_id: "portfolio/tools-images/xfm62otrufulncmqppep",
-        image_url:
-          "https://res.cloudinary.com/dahdvag/image/upload/v1778693965/portfolio/tools-images/xfm62otrufulncmqppep.png",
-        tool_url: "https://tailwindcss.com/",
         dad: 500,
-      },
-      {
-        name: "Bootstrap",
-        description: "Bootstrap",
-        image_id: "portfolio/tools-images/ab6soit5zjeardmpxhfz",
-        image_url:
-          "https://res.cloudinary.com/dahdvag/image/upload/v1778693965/portfolio/tools-images/ab6soit5zjeardmpxhfz.png",
-        tool_url: "http://getbootstrap.com/",
-        dad: 600,
-      },
-      {
-        name: "React JS",
-        description: "React JS",
-        image_id: "portfolio/tools-images/ly1uwsj5ygeatywlali0",
-        image_url:
-          "https://res.cloudinary.com/dahdvag/image/upload/v1778693965/portfolio/tools-images/ly1uwsj5ygeatywlali0.png",
-        tool_url: "https://react.dev/",
-        dad: 700,
-      },
-      {
-        name: "Vue JS",
-        description: "Vue JS",
-        image_id: "portfolio/tools-images/xotwivbdiupwlqfmcb8d",
-        image_url:
-          "https://res.cloudinary.com/dahdvag/image/upload/v1778693965/portfolio/tools-images/xotwivbdiupwlqfmcb8d.png",
-        tool_url: "https://vuejs.org/",
-        dad: 800,
-      },
-      {
-        name: "Next JS",
-        description: "Next JS",
-        image_id: "portfolio/tools-images/mxerrthgz0htfyqwbtjr",
-        image_url:
-          "https://res.cloudinary.com/dahdvag/image/upload/v1778695270/portfolio/tools-images/mxerrthgz0htfyqwbtjr.png",
-        tool_url: "http://nextjs.org/",
-        dad: 100,
-      },
-      {
-        name: "Laravel",
-        description: "Laravel",
-        image_id: "portfolio/tools-images/gbavl7ljdul1rsokgzqk",
-        image_url:
-          "https://res.cloudinary.com/dahdvag/image/upload/v1778693965/portfolio/tools-images/gbavl7ljdul1rsokgzqk.png",
-        tool_url: "https://laravel.com/",
-        dad: 200,
+        sort_order: 2,
+        type: "runtime",
+        show: true,
       },
       {
         name: "Adonis JS",
@@ -252,7 +215,22 @@ async function main() {
         image_url:
           "https://res.cloudinary.com/dahdvag/image/upload/v1778693965/portfolio/tools-images/gsiy2v2gm9lobjpbknks.png",
         tool_url: "https://adonisjs.com/",
-        dad: 300,
+        dad: 600,
+        sort_order: 3,
+        type: "framework",
+        show: true,
+      },
+      {
+        name: "Bootstrap",
+        description: "Bootstrap",
+        image_id: "portfolio/tools-images/ab6soit5zjeardmpxhfz",
+        image_url:
+          "https://res.cloudinary.com/dahdvag/image/upload/v1778693965/portfolio/tools-images/ab6soit5zjeardmpxhfz.png",
+        tool_url: "http://getbootstrap.com/",
+        dad: 700,
+        sort_order: 3,
+        type: "framework",
+        show: true,
       },
       {
         name: "CodeIgniter",
@@ -261,7 +239,10 @@ async function main() {
         image_url:
           "https://res.cloudinary.com/dahdvag/image/upload/v1778693965/portfolio/tools-images/w9cunrneeb3frqesu2nt.png",
         tool_url: "https://codeigniter.com/",
-        dad: 400,
+        dad: 800,
+        sort_order: 3,
+        type: "framework",
+        show: true,
       },
       {
         name: "Express JS",
@@ -270,16 +251,130 @@ async function main() {
         image_url:
           "https://res.cloudinary.com/dahdvag/image/upload/v1778693965/portfolio/tools-images/slfx0iwmm1s76fcpwa1p.png",
         tool_url: "https://expressjs.com/",
-        dad: 500,
+        dad: 100,
+        sort_order: 3,
+        type: "framework",
+        show: true,
       },
       {
-        name: "Visual Studio Code",
-        description: "Visual Studio Code",
-        image_id: "portfolio/tools-images/ltxftr0f1oofbhx2ggwp",
+        name: "Flask",
+        description: "Flask",
+        image_id: "portfolio/tools-images/aebvanhonlyuppdewxto",
         image_url:
-          "https://res.cloudinary.com/dahdvag/image/upload/v1778693965/portfolio/tools-images/ltxftr0f1oofbhx2ggwp.png",
-        tool_url: "https://code.visualstudio.com/",
+          "https://res.cloudinary.com/dahdvag/image/upload/v1778743906/portfolio/tools-images/aebvanhonlyuppdewxto.png",
+        tool_url: "https://flask.palletsprojects.com/en/stable/",
+        dad: 200,
+        sort_order: 3,
+        type: "framework",
+        show: true,
+      },
+      {
+        name: "Flutter",
+        description: "Flutter",
+        image_id: "portfolio/tools-images/ged9grbdwfigqm9pjvix",
+        image_url:
+          "https://res.cloudinary.com/dahdvag/image/upload/v1778744167/portfolio/tools-images/ged9grbdwfigqm9pjvix.png",
+        tool_url: "hhttps://flutter.dev/",
+        dad: 300,
+        sort_order: 3,
+        type: "framework",
+        show: false,
+      },
+      {
+        name: "Laravel",
+        description: "Laravel",
+        image_id: "portfolio/tools-images/gbavl7ljdul1rsokgzqk",
+        image_url:
+          "https://res.cloudinary.com/dahdvag/image/upload/v1778693965/portfolio/tools-images/gbavl7ljdul1rsokgzqk.png",
+        tool_url: "https://laravel.com/",
+        dad: 400,
+        sort_order: 3,
+        type: "framework",
+        show: true,
+      },
+      {
+        name: "Nest JS",
+        description: "Nest JS",
+        image_id: "portfolio/tools-images/vomprnwyguckzloqnkny",
+        image_url:
+          "https://res.cloudinary.com/dahdvag/image/upload/v1778744043/portfolio/tools-images/vomprnwyguckzloqnkny.png",
+        tool_url: "https://nestjs.com/",
+        dad: 500,
+        sort_order: 3,
+        type: "framework",
+        show: true,
+      },
+      {
+        name: "Next JS",
+        description: "Next JS",
+        image_id: "portfolio/tools-images/mxerrthgz0htfyqwbtjr",
+        image_url:
+          "https://res.cloudinary.com/dahdvag/image/upload/v1778695270/portfolio/tools-images/mxerrthgz0htfyqwbtjr.png",
+        tool_url: "http://nextjs.org/",
         dad: 600,
+        sort_order: 3,
+        type: "framework",
+        show: true,
+      },
+      {
+        name: "Nuxt JS",
+        description: "Nuxt JS",
+        image_id: "portfolio/tools-images/gwahpcpz0fzst45lxipp",
+        image_url:
+          "https://res.cloudinary.com/dahdvag/image/upload/v1778744449/portfolio/tools-images/gwahpcpz0fzst45lxipp.png",
+        tool_url: "https://nuxt.com/",
+        dad: 700,
+        sort_order: 3,
+        type: "framework",
+        show: false,
+      },
+      {
+        name: "React JS",
+        description: "React JS",
+        image_id: "portfolio/tools-images/ly1uwsj5ygeatywlali0",
+        image_url:
+          "https://res.cloudinary.com/dahdvag/image/upload/v1778693965/portfolio/tools-images/ly1uwsj5ygeatywlali0.png",
+        tool_url: "https://react.dev/",
+        dad: 800,
+        sort_order: 3,
+        type: "framework",
+        show: true,
+      },
+      {
+        name: "Tailwind CSS",
+        description: "Tailwind CSS",
+        image_id: "portfolio/tools-images/xfm62otrufulncmqppep",
+        image_url:
+          "https://res.cloudinary.com/dahdvag/image/upload/v1778693965/portfolio/tools-images/xfm62otrufulncmqppep.png",
+        tool_url: "https://tailwindcss.com/",
+        dad: 100,
+        sort_order: 3,
+        type: "framework",
+        show: true,
+      },
+      {
+        name: "Vue JS",
+        description: "Vue JS",
+        image_id: "portfolio/tools-images/xotwivbdiupwlqfmcb8d",
+        image_url:
+          "https://res.cloudinary.com/dahdvag/image/upload/v1778693965/portfolio/tools-images/xotwivbdiupwlqfmcb8d.png",
+        tool_url: "https://vuejs.org/",
+        dad: 200,
+        sort_order: 3,
+        type: "framework",
+        show: true,
+      },
+      {
+        name: "MongoDB",
+        description: "MongoDB",
+        image_id: "portfolio/tools-images/biwmzi6cugwwdtlju1bl",
+        image_url:
+          "https://res.cloudinary.com/dahdvag/image/upload/v1778744309/portfolio/tools-images/biwmzi6cugwwdtlju1bl.png",
+        tool_url: "https://www.mongodb.com/",
+        dad: 300,
+        sort_order: 4,
+        type: "database",
+        show: false,
       },
       {
         name: "MySQL",
@@ -288,7 +383,31 @@ async function main() {
         image_url:
           "https://res.cloudinary.com/dahdvag/image/upload/v1778693965/portfolio/tools-images/hlrctjuyyqishzjkgfn0.png",
         tool_url: "https://www.mysql.com/",
-        dad: 700,
+        dad: 400,
+      },
+      {
+        name: "Oracle",
+        description: "Oracle",
+        image_id: "portfolio/tools-images/oqxohdlai06yho1ksbr9",
+        image_url:
+          "https://res.cloudinary.com/dahdvag/image/upload/v1778744274/portfolio/tools-images/oqxohdlai06yho1ksbr9.png",
+        tool_url: "https://www.oracle.com/asean/database/",
+        dad: 500,
+        sort_order: 4,
+        type: "database",
+        show: true,
+      },
+      {
+        name: "PostgresSQL",
+        description: "PostgresSQL",
+        image_id: "portfolio/tools-images/xsbnjzucftzqkd4vjaww",
+        image_url:
+          "https://res.cloudinary.com/dahdvag/image/upload/v1778744243/portfolio/tools-images/xsbnjzucftzqkd4vjaww.png",
+        tool_url: "https://www.postgresql.org/",
+        dad: 600,
+        sort_order: 4,
+        type: "database",
+        show: false,
       },
       {
         name: "Github",
@@ -297,7 +416,46 @@ async function main() {
         image_url:
           "https://res.cloudinary.com/dahdvag/image/upload/v1778693965/portfolio/tools-images/jdc7qs3bggkxjzjdamwy.png",
         tool_url: "https://github.com/",
+        dad: 700,
+        sort_order: 5,
+        type: "tools",
+        show: true,
+      },
+      {
+        name: "Gitlab",
+        description: "Gitlab",
+        image_id: "portfolio/tools-images/ikyqwike5jtaovppuvod",
+        image_url:
+          "https://res.cloudinary.com/dahdvag/image/upload/v1778746086/portfolio/tools-images/ikyqwike5jtaovppuvod.png",
+        tool_url: "https://gitlab.com/gitlab-com",
         dad: 800,
+        sort_order: 5,
+        type: "tools",
+        show: true,
+      },
+      {
+        name: "Postman",
+        description: "Postman",
+        image_id: "portfolio/tools-images/bpsoipznbpr4h3jta8tw",
+        image_url:
+          "https://res.cloudinary.com/dahdvag/image/upload/v1778744345/portfolio/tools-images/bpsoipznbpr4h3jta8tw.png",
+        tool_url: "https://www.postman.com/",
+        dad: 100,
+        sort_order: 5,
+        type: "tools",
+        show: true,
+      },
+      {
+        name: "Visual Studio Code",
+        description: "Visual Studio Code",
+        image_id: "portfolio/tools-images/ltxftr0f1oofbhx2ggwp",
+        image_url:
+          "https://res.cloudinary.com/dahdvag/image/upload/v1778693965/portfolio/tools-images/ltxftr0f1oofbhx2ggwp.png",
+        tool_url: "https://code.visualstudio.com/",
+        dad: 200,
+        sort_order: 5,
+        type: "tools",
+        show: true,
       },
     ],
   });
