@@ -13,6 +13,17 @@ import { uploadImageTools } from "../utils/upload";
 import { UploadedFile } from "express-fileupload";
 import { cloudinary } from "../config/cloudinary";
 import { ToolRepository } from "../repositories/tool-repository";
+const getSortOrderByType = (type: string) => {
+  const sortOrderMap: Record<string, number> = {
+    language: 1,
+    runtime: 2,
+    framework: 3,
+    database: 4,
+    tools: 5,
+  };
+
+  return sortOrderMap[type];
+};
 export class ToolService {
   static async create(
     request: CreateToolRequest,
@@ -28,6 +39,9 @@ export class ToolService {
       dad: data.dad,
       image_id: imageUpload.public_id,
       image_url: imageUpload.secure_url,
+      type: data.type,
+      sort_order: getSortOrderByType(data.type),
+      show: data.show ? data.show : true,
     });
     return toToolResponse(response);
   }
@@ -44,6 +58,37 @@ export class ToolService {
     }
 
     const data = await ToolRepository.findMany(
+      filters,
+      requestList.skip,
+      requestList.take
+    );
+
+    const totalData = await ToolRepository.count(filters);
+
+    const result = {
+      data,
+      total_data: totalData,
+      paging: {
+        current_page: requestList.page,
+        total_page: Math.ceil(totalData / requestList.take),
+      },
+    };
+
+    return tolistResponse(result);
+  }
+
+  static async getAllPublic(request: ListToolRequest): Promise<listResponse> {
+    const requestList = Validation.validate(ToolValidation.LIST, request);
+    const filters: any[] = [];
+    if (requestList.name) {
+      filters.push({
+        name: {
+          contains: requestList.name,
+        },
+      });
+    }
+
+    const data = await ToolRepository.findManyPublic(
       filters,
       requestList.skip,
       requestList.take
@@ -98,6 +143,9 @@ export class ToolService {
       description: data.description ?? tool.description,
       tool_url: data.tool_url ?? tool.tool_url,
       dad: data.dad ?? tool.dad,
+      type: data.type ?? tool.type,
+      show: data.show ?? tool.show,
+      sort_order: getSortOrderByType(data.type!) ?? tool.sort_order,
       image_id,
       image_url,
     });

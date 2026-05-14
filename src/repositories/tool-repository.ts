@@ -13,7 +13,33 @@ export class ToolRepository {
       },
       skip,
       take,
-      orderBy: { created_at: "asc" },
+      orderBy: [
+        {
+          sort_order: "asc",
+        },
+        {
+          name: "asc",
+        },
+      ],
+    });
+  }
+  static async findManyPublic(filters: any, skip: number, take: number) {
+    return prismaClient.tool.findMany({
+      where: {
+        AND: filters,
+        deleted_at: null,
+        show: true,
+      },
+      skip,
+      take,
+      orderBy: [
+        {
+          sort_order: "asc",
+        },
+        {
+          name: "asc",
+        },
+      ],
     });
   }
 

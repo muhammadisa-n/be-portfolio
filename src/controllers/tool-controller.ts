@@ -25,6 +25,8 @@ export class ToolController {
         description: req.body.description,
         tool_url: req.body.tool_url,
         dad: req.body.dad,
+        type: req.body.type,
+        show: req.body.show,
       };
 
       const file = req.files?.image;
@@ -61,6 +63,24 @@ export class ToolController {
       next(e);
     }
   }
+  static async getAllPublic(req: Request, res: Response, next: NextFunction) {
+    try {
+      const page = Number(req.query.page) || 1;
+      const take = Number(req.query.take) || 10;
+      const request: ListToolRequest = {
+        page: page,
+        take: take,
+        skip: (page - 1) * take,
+        name: req.query.name as string,
+      };
+      const response = await ToolService.getAllPublic(request);
+      res
+        .status(200)
+        .json(successResponse("Berhasil Get All Data", 200, response));
+    } catch (e) {
+      next(e);
+    }
+  }
   static async getOne(req: Request, res: Response, next: NextFunction) {
     try {
       const id = req.params.id;
@@ -79,6 +99,7 @@ export class ToolController {
         description: req.body.description,
         tool_url: req.body.tool_url,
         dad: req.body.dad,
+        type: req.body.type,
       };
       const file = req.files?.image;
       const image = Array.isArray(file) ? file[0] : file;

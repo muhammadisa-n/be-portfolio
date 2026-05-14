@@ -33,6 +33,8 @@ jobs:
 
              npm install
              npm run build
+             npx prisma migrate dev
+             npx prisma generate
              pm2 flush be-portfolio
              sudo systemctl restart nginx
              pm2 restart be-portfolio --update-env

@@ -155,6 +155,21 @@ async function main() {
           "https://res.cloudinary.com/dahdvag/image/upload/v1778693965/portfolio/tools-images/a39yz9z1q6figc6vyonv.png",
         tool_url: "https://developer.mozilla.org/en-US/docs/Web/JavaScript",
         dad: 100,
+        sort_order: 1,
+        type: "language",
+        show: true,
+      },
+      {
+        name: "PHP",
+        description: "PHP",
+        image_id: "portfolio/tools-images/o8g3mmg7qmec3mufim5c",
+        image_url:
+          "https://res.cloudinary.com/dahdvag/image/upload/v1778693965/portfolio/tools-images/o8g3mmg7qmec3mufim5c.png",
+        tool_url: "https://www.php.net/",
+        dad: 200,
+        sort_order: 1,
+        type: "language",
+        show: true,
       },
       {
         name: "Typescript",
@@ -166,15 +181,7 @@ async function main() {
           "https://developer.mozilla.org/en-US/docs/Glossary/TypeScript",
         dad: 200,
       },
-      {
-        name: "PHP",
-        description: "PHP",
-        image_id: "portfolio/tools-images/o8g3mmg7qmec3mufim5c",
-        image_url:
-          "https://res.cloudinary.com/dahdvag/image/upload/v1778693965/portfolio/tools-images/o8g3mmg7qmec3mufim5c.png",
-        tool_url: "https://www.php.net/",
-        dad: 300,
-      },
+
       {
         name: "Node JS",
         description: "Node JS",

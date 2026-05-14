@@ -1,5 +1,11 @@
 import { z, ZodType } from "zod";
-
+const ToolTypeEnum = z.enum([
+  "language",
+  "runtime",
+  "framework",
+  "database",
+  "tools",
+]);
 export class ToolValidation {
   static readonly CREATE: ZodType = z.object({
     name: z.preprocess(
@@ -34,6 +40,8 @@ export class ToolValidation {
         return isNaN(parsed) ? val : parsed;
       }, z.number().nullable())
       .optional(),
+    type: z.preprocess((v) => (v === null ? undefined : v), ToolTypeEnum),
+    show: z.boolean().optional(),
   });
   static readonly UPDATE: ZodType = z.object({
     name: z.string().optional(),
@@ -46,6 +54,8 @@ export class ToolValidation {
         return isNaN(parsed) ? val : parsed;
       }, z.number().nullable())
       .optional(),
+    type: ToolTypeEnum.optional(),
+    show: z.boolean().optional(),
   });
   static readonly LIST: ZodType = z.object({
     page: z.number().min(1).positive(),
