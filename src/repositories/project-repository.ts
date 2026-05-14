@@ -109,11 +109,32 @@ export class ProjectRepository {
       },
       skip,
       take,
-      orderBy: { created_at: "asc" },
+      orderBy: {
+        created_at: "asc",
+      },
       include: {
         project_has_tool: {
+          orderBy: [
+            {
+              tool: {
+                sort_order: "asc",
+              },
+            },
+            {
+              tool: {
+                name: "asc",
+              },
+            },
+          ],
           include: {
-            tool: { select: { name: true } },
+            tool: {
+              select: {
+                name: true,
+                tool_url: true,
+                type: true,
+                sort_order: true,
+              },
+            },
           },
         },
       },
