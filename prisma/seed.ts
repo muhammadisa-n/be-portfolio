@@ -116,6 +116,17 @@ async function main() {
       { language: "en", key: "contactp1", value: "Contact Me" },
       {
         language: "id",
+        key: "contactServerError",
+        value: "Tidak bisa mengirim pesan. Server sedang bermasalah.",
+      },
+      {
+        language: "en",
+        key: "contactServerError",
+        value:
+          "Unable to send message. The server is currently experiencing issues.",
+      },
+      {
+        language: "id",
         key: "contactsweetalertMsgSuccess",
         value: "Pesan Berhasil Terkirim",
       },
