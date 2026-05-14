@@ -424,9 +424,9 @@ async function main() {
       {
         name: "Gitlab",
         description: "Gitlab",
-        image_id: "portfolio/tools-images/ikyqwike5jtaovppuvod",
+        image_id: "portfolio/tools-images/w7pt0jqkjbgicytbywht",
         image_url:
-          "https://res.cloudinary.com/dahdvag/image/upload/v1778746086/portfolio/tools-images/ikyqwike5jtaovppuvod.png",
+          "https://res.cloudinary.com/dahdvag/image/upload/v1778746811/portfolio/tools-images/w7pt0jqkjbgicytbywht.png",
         tool_url: "https://gitlab.com/gitlab-com",
         dad: 800,
         sort_order: 5,
