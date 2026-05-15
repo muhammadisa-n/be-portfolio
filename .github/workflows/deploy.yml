@@ -1,4 +1,4 @@
-name: Deploy On VPS
+name: Deploy To VPS
 
 on:
   push:
@@ -9,7 +9,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
       - name: Deploy via SSH
         uses: appleboy/ssh-action@master
@@ -18,23 +19,46 @@ jobs:
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.VPS_KEY }}
           port: ${{ secrets.VPS_SSH_PORT }}
-          debug: true
           script: |
             set -e
-             export NVM_DIR="$HOME/.nvm"
-             [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
-             nvm use 20.19.5
 
-             cd /var/www/${{ secrets.VPS_DOMAIN }}/be-portfolio
-             git pull origin main
+            export NVM_DIR="$HOME/.nvm"
+            [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
 
-             rm -f .env
-             echo "${{ secrets.ENV_FILE }}" > .env
+            nvm use 20.19.5
 
-             npm install
-             npx prisma migrate dev
-             npx prisma generate
-             npm run build
-             pm2 flush be-portfolio
-             sudo systemctl restart nginx
-             pm2 restart be-portfolio --update-env
+            cd /var/www/${{ secrets.VPS_DOMAIN }}/be-portfolio
+
+            echo "Pull latest code..."
+            git pull origin main
+
+            echo "Create env file..."
+            rm -f .env
+
+            cat > .env << 'EOF'
+            ${{ secrets.ENV_FILE }}
+            EOF
+
+            echo "Install dependencies..."
+            npm install
+
+            echo "Run prisma generate..."
+            npx prisma generate
+
+            echo "Run database migration..."
+            npx prisma migrate dev
+
+            echo "Build application..."
+            npm run build
+
+            echo "Flush PM2 logs..."
+            pm2 flush be-portfolio
+
+            echo "Restart PM2..."
+            pm2 restart be-portfolio --update-env
+
+            echo "Reload nginx..."
+            sudo nginx -t
+            sudo systemctl reload nginx
+
+            echo "Deploy completed successfully"
