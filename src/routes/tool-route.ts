@@ -13,6 +13,18 @@ toolRouter.get(
   ToolController.getAll
 );
 toolRouter.get(
+  "/api/tools/count",
+  asyncHandler(authMiddleware),
+  asyncHandler(apiKeyMiddleware),
+  ToolController.count
+);
+toolRouter.get(
+  "/api/tools/most-used",
+  asyncHandler(authMiddleware),
+  asyncHandler(apiKeyMiddleware),
+  ToolController.mostUsed
+);
+toolRouter.get(
   "/api/tools/:id",
   asyncHandler(authMiddleware),
   asyncHandler(apiKeyMiddleware),

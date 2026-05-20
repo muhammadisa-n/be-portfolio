@@ -5,6 +5,8 @@ import {
   UpdateProjectRequest,
   ProjectResponse,
   toProjectResponse,
+  toProjectDetailResponse,
+  projectDetailResponse,
 } from "../dtos/project-dto";
 import { ProjectValidation } from "../validations/project-validation";
 import { listResponse, tolistResponse } from "../dtos/list-dto";
@@ -66,12 +68,12 @@ export class ProjectService {
     return tolistResponse(result);
   }
 
-  static async getOne(id: number): Promise<ProjectResponse> {
+  static async getOne(id: number): Promise<projectDetailResponse> {
     const data = await ProjectRepository.findById(id);
     if (!data) {
       throw new ResponseError(404, "Data Tidak Ditemukan");
     }
-    return toProjectResponse(data);
+    return toProjectDetailResponse(data);
   }
 
   static async update(

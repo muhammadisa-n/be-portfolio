@@ -15,6 +15,13 @@ projectRouter.get(
   ProjectController.getAll
 );
 projectRouter.get(
+  "/api/projects/count",
+  asyncHandler(authMiddleware),
+  asyncHandler(apiKeyMiddleware),
+  ProjectController.count
+);
+
+projectRouter.get(
   "/api/projects/:id",
   asyncHandler(apiKeyMiddleware),
   asyncHandler(authMiddleware),

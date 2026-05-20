@@ -1,4 +1,4 @@
-import { Project } from "@prisma/client";
+import { Prisma, Project } from "@prisma/client";
 
 export type CreateProjectRequest = {
   name_en: string;
@@ -41,8 +41,17 @@ export type projectDetailResponse = {
   created_at: Date;
   updated_at: Date;
   deleted_at: Date;
+  project_has_tool: {
+    project_id: number;
+    tool_id: number;
+    tool: {
+      name: string;
+      tool_url: string;
+      type: string | null;
+      sort_order: number | null;
+    };
+  }[];
 };
-
 export type ProjectResponse = {
   id: number;
   name: string;
@@ -54,8 +63,24 @@ export type ProjectResponse = {
   dad: number;
 };
 
+type ProjectWithTools = Prisma.ProjectGetPayload<{
+  include: {
+    project_has_tool: {
+      include: {
+        tool: {
+          select: {
+            name: true;
+            tool_url: true;
+            type: true;
+            sort_order: true;
+          };
+        };
+      };
+    };
+  };
+}>;
 export function toProjectDetailResponse(
-  project: Project
+  project: ProjectWithTools
 ): projectDetailResponse {
   return {
     id: project.id,
@@ -69,6 +94,7 @@ export function toProjectDetailResponse(
     created_at: project.created_at,
     updated_at: project.updated_at,
     deleted_at: project.deleted_at!,
+    project_has_tool: project.project_has_tool || [],
   };
 }
 export function toProjectResponse(project: Project): ProjectResponse {

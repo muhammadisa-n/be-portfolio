@@ -110,7 +110,7 @@ export class ProjectRepository {
       skip,
       take,
       orderBy: {
-        created_at: "asc",
+        updated_at: "desc",
       },
       include: {
         project_has_tool: {
@@ -158,7 +158,35 @@ export class ProjectRepository {
   }
 
   static async findById(id: number) {
-    return prismaClient.project.findUnique({ where: { id } });
+    return prismaClient.project.findUnique({
+      where: { id },
+      include: {
+        project_has_tool: {
+          orderBy: [
+            {
+              tool: {
+                sort_order: "asc",
+              },
+            },
+            {
+              tool: {
+                name: "asc",
+              },
+            },
+          ],
+          include: {
+            tool: {
+              select: {
+                name: true,
+                tool_url: true,
+                type: true,
+                sort_order: true,
+              },
+            },
+          },
+        },
+      },
+    });
   }
 
   static async update(id: number, data: any, tool_ids?: number[]) {

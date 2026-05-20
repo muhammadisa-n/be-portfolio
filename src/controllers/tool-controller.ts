@@ -144,4 +144,25 @@ export class ToolController {
       next(e);
     }
   }
+  static async count(req: Request, res: Response, next: NextFunction) {
+    try {
+      const data = await ToolService.count();
+      res.status(200).json(successResponse("Berhasil Count Data", 200, data));
+    } catch (e) {
+      next(e);
+    }
+  }
+  static async mostUsed(req: Request, res: Response, next: NextFunction) {
+    try {
+      const take = Number(req.query.take) || 5;
+
+      const data = await ToolService.mostUsed(take);
+
+      res
+        .status(200)
+        .json(successResponse("Berhasil Get Most Used Tools", 200, data));
+    } catch (e) {
+      next(e);
+    }
+  }
 }
