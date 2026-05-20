@@ -4,5 +4,5 @@ services:
     image: be_portfolio_image
     build: .
     ports:
-      - "16000:16000"
+      - "18000:18000"
     restart: always
