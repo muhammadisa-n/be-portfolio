@@ -34,15 +34,17 @@ FROM base AS build
 # Production image
 FROM node:22-slim AS production
 
+RUN apt-get update && apt-get install -y openssl tzdata \
+  && rm -rf /var/lib/apt/lists/*
+
+ENV TZ=Asia/Jakarta
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
 WORKDIR /usr/src/app
 
-# Copy package files untuk install production dependencies
 COPY package*.json ./
-
-# Install production dependencies saja
 RUN npm ci --omit=dev
 
-# Copy hasil build dan file penting dari build stage
 COPY --from=build /usr/src/app/build ./build
 COPY --from=build /usr/src/app/node_modules/.prisma ./node_modules/.prisma
 COPY --from=build /usr/src/app/prisma ./prisma
