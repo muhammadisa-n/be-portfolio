@@ -48,6 +48,6 @@ COPY --from=build /usr/src/app/node_modules/.prisma ./node_modules/.prisma
 COPY --from=build /usr/src/app/prisma ./prisma
 COPY --from=build /usr/src/app/.env ./
 
-EXPOSE 16000
+EXPOSE 18000
 
 CMD ["node", "build/main.js"]
