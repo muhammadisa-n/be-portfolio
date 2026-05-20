@@ -75,4 +75,38 @@ export class FileController {
       next(error);
     }
   }
+  static async publicDownload(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
+    try {
+      const version = req.params.version as FileVersion;
+
+      const file = await FileService.download(version);
+
+      res.redirect(file.file_url);
+    } catch (error) {
+      next(error);
+    }
+  }
+  static async publicCheck(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
+    try {
+      const version = req.params.version as FileVersion;
+
+      const file = await FileService.download(version);
+
+      res.status(200).json(
+        successResponse("File tersedia", 200, {
+          url: file.file_url,
+        })
+      );
+    } catch (error) {
+      next(error);
+    }
+  }
 }

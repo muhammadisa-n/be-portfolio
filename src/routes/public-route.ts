@@ -14,6 +14,7 @@ publicRouter.get("/api/public/tools/", ToolController.getAllPublic);
 publicRouter.post("/api/public/messages/", MessageController.create);
 publicRouter.get(
   "/api/public/files/download/:version",
-  FileController.download
+  FileController.publicDownload
 );
 publicRouter.get("/api/public/translations", TranslationController.getAll);
+publicRouter.get("/public/files/check/:version", FileController.publicCheck);
