@@ -14,6 +14,8 @@ model User {
   fullName   String    @db.VarChar(100)
   email      String    @unique @db.VarChar(100)
   password   String    @db.VarChar(255)
+  image_id   String?   @db.VarChar(200)
+  image_url  String?   @db.VarChar(300)
   created_at DateTime  @default(now()) @db.Timestamp(0)
   updated_at DateTime  @updatedAt @db.Timestamp(0)
   deleted_at DateTime? @db.Timestamp(0)
@@ -97,15 +99,21 @@ model Translation {
   @@map("translations")
 }
 
+enum FileVersion {
+  INDONESIA
+  ENGLISH
+}
+
 model File {
-  id         Int       @id @default(autoincrement())
-  filename   String    @db.VarChar(100)
-  file_id    String    @db.VarChar(100)
-  file_url   String    @db.VarChar(300)
-  mimetype   String    @db.VarChar(300)
-  created_at DateTime  @default(now()) @db.Timestamp(0)
-  updated_at DateTime  @updatedAt @db.Timestamp(0)
-  deleted_at DateTime? @db.Timestamp(0)
+  id         Int          @id @default(autoincrement())
+  filename   String       @db.VarChar(100)
+  file_id    String       @db.VarChar(100)
+  file_url   String       @db.VarChar(300)
+  mimetype   String       @db.VarChar(300)
+  version    FileVersion? @unique
+  created_at DateTime     @default(now()) @db.Timestamp(0)
+  updated_at DateTime     @updatedAt @db.Timestamp(0)
+  deleted_at DateTime?    @db.Timestamp(0)
 
   @@map("files")
 }

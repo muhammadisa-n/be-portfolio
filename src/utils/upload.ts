@@ -48,3 +48,29 @@ export const validateImageFile = (file: UploadedFile) => {
     throw new ResponseError(400, "Ukuran Image Maksimal 5MB.");
   }
 };
+export const deleteCloudinaryFile = async (publicId?: string | null) => {
+  if (!publicId) return;
+
+  await cloudinary.uploader.destroy(publicId);
+};
+
+export const deleteCloudinaryRawFile = async (publicId?: string | null) => {
+  if (!publicId) return;
+
+  await cloudinary.uploader.destroy(publicId, {
+    resource_type: "raw",
+  });
+};
+
+export const validatePdfFile = (file: UploadedFile) => {
+  const allowedTypes = ["application/pdf"];
+  const maxSize = 10 * 1024 * 1024;
+
+  if (!allowedTypes.includes(file.mimetype)) {
+    throw new ResponseError(400, "Format file harus PDF");
+  }
+
+  if (file.size > maxSize) {
+    throw new ResponseError(400, "Ukuran PDF maksimal 10MB");
+  }
+};

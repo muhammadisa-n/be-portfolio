@@ -18,6 +18,8 @@ import { UserRepository } from "../repositories/user-repository";
 import { UserRequest } from "../types/type-request";
 import { prismaClient } from "../config/database";
 import { env } from "../config/env";
+import { UploadedFile } from "express-fileupload";
+import { deleteCloudinaryFile, uploadFile } from "../utils/upload";
 
 export class AuthService {
   static async login(request: loginRequest) {
@@ -71,7 +73,8 @@ export class AuthService {
 
   static async updateProfile(
     user: User,
-    request: UpdateUserRequest
+    request: UpdateUserRequest,
+    file?: UploadedFile
   ): Promise<UserResponse> {
     const data = Validation.validate(UserValidation.UPDATE, request);
     if (data.fullName) {
@@ -91,11 +94,26 @@ export class AuthService {
       }
       user.email = data.email;
     }
+    let image_id = user.image_id;
+    let image_url = user.image_url;
+    if (file) {
+      const uploadResult = await uploadFile(file);
+
+      if (user.image_id) {
+        await deleteCloudinaryFile(user.image_id);
+      }
+
+      image_id = uploadResult.public_id;
+      image_url = uploadResult.secure_url;
+    }
+
     const result = await UserRepository.updateUser(
       {
         fullName: user.fullName,
         password: user.password,
         email: user.email,
+        image_id,
+        image_url,
       },
       user.id
     );

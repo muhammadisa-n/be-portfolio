@@ -7,6 +7,18 @@ import { FileController } from "../controllers/file-controller";
 export const fileRouter = express.Router();
 
 // Example routes:
+fileRouter.get(
+  "/api/files",
+  asyncHandler(apiKeyMiddleware),
+  asyncHandler(authMiddleware),
+  FileController.getAll
+);
+fileRouter.get(
+  "/api/files/download/:version",
+  asyncHandler(apiKeyMiddleware),
+  asyncHandler(authMiddleware),
+  FileController.download
+);
 fileRouter.post(
   "/api/files/upload",
   asyncHandler(apiKeyMiddleware),

@@ -1,22 +1,50 @@
 import { NextFunction, Request, Response } from "express";
 import { FileService } from "../services/file-service";
-import { errorResponse, successCreateResponse } from "../utils/response";
+import {
+  errorResponse,
+  successCreateResponse,
+  successResponse,
+} from "../utils/response";
 import { UploadedFile } from "express-fileupload";
-import fs from "fs";
-import path from "path";
+import { ListFileRequest } from "../dtos/file-dto";
+import { FileVersion } from "@prisma/client";
+import axios from "axios";
 export class FileController {
+  static async getAll(req: Request, res: Response, next: NextFunction) {
+    try {
+      const page = Number(req.query.page) || 1;
+      const take = Number(req.query.take) || 10;
+      const request: ListFileRequest = {
+        page: page,
+        take: take,
+        skip: (page - 1) * take,
+        name: req.query.name as string,
+      };
+      const response = await FileService.getAll(request);
+      res
+        .status(200)
+        .json(successResponse("Berhasil Get All Data", 200, response));
+    } catch (e) {
+      next(e);
+    }
+  }
   static async upload(req: Request, res: Response, next: NextFunction) {
     try {
       const file = req.files?.file;
+      const version = req.body.version as FileVersion;
+
       if (!file) {
         res.status(400).json(errorResponse("File Belum Diupload", 400));
+        return;
       }
+
       const fileUpload = Array.isArray(file) ? file[0] : file;
 
-      const response = await FileService.upload(fileUpload as UploadedFile);
-      fs.unlink(fileUpload!.tempFilePath, (err) => {
-        if (err) console.error("Gagal Hapus File Temp", err);
-      });
+      const response = await FileService.upload(
+        fileUpload as UploadedFile,
+        version
+      );
+
       res.status(200).json(successCreateResponse(response));
     } catch (error) {
       next(error);
@@ -28,33 +56,21 @@ export class FileController {
     next: NextFunction
   ): Promise<void> {
     try {
-      const id = parseInt(req.params.id);
+      const version = req.params.version as FileVersion;
 
-      const file = await FileService.download(id);
+      const file = await FileService.download(version);
 
-      if (!file) {
-        res.status(404).json(errorResponse("File tidak ditemukan", 404));
-        return;
-      }
+      const cloudinaryResponse = await axios.get(file.file_url, {
+        responseType: "stream",
+      });
 
-      const extension = file.mimetype.split("/")[1];
-
-      const fullPath = path.join(
-        process.cwd(),
-        "public",
-        file.file_url.replace(/^\/+/, "")
+      res.setHeader("Content-Type", file.mimetype);
+      res.setHeader(
+        "Content-Disposition",
+        `attachment; filename="${file.filename}.pdf"`
       );
 
-      const downloadName = `${file.filename}.${extension}`;
-
-      if (!fs.existsSync(fullPath)) {
-        res
-          .status(404)
-          .json(errorResponse("File tidak ditemukan di server", 404));
-        return;
-      }
-
-      res.download(fullPath, downloadName);
+      cloudinaryResponse.data.pipe(res);
     } catch (error) {
       next(error);
     }
