@@ -9,6 +9,8 @@ import { MessageValidation } from "../validations/message-validation";
 import { listResponse, tolistResponse } from "../dtos/list-dto";
 import { ResponseError } from "../utils/response-error";
 import { MessageRepository } from "../repositories/message-repository";
+import { TrashRepository } from "../repositories/trash-repository";
+import { TrashService } from "./trash-service";
 export class MessageService {
   static async create(request: CreateMessageRequest): Promise<MessageResponse> {
     const data = Validation.validate(MessageValidation.CREATE, request);
@@ -66,6 +68,12 @@ export class MessageService {
       throw new ResponseError(404, "Data Tidak Ditemukan");
     }
     await MessageRepository.softDelete(id);
+    await TrashRepository.createLog({
+      entity_id: String(data.id),
+      entity_type: "message",
+      title: TrashService.getTrashTitle("message", data),
+      subtitle: TrashService.getTrashSubtitle("message", data),
+    });
   }
 
   static async restoreData(id: string) {

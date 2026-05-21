@@ -7,6 +7,7 @@ import { messageRouter } from "./message-route";
 import { fileRouter } from "./file-route";
 import { translationRouter } from "./translation-route";
 import { publicRouter } from "./public-route";
+import { trashRouter } from "./trash-route";
 
 export const mainRouter = express.Router();
 
@@ -43,4 +44,5 @@ mainRouter.use(projectRouter);
 mainRouter.use(messageRouter);
 mainRouter.use(fileRouter);
 mainRouter.use(translationRouter);
+mainRouter.use(trashRouter);
 mainRouter.use(publicRouter);

@@ -13,6 +13,8 @@ import { uploadImageTools } from "../utils/upload";
 import { UploadedFile } from "express-fileupload";
 import { cloudinary } from "../config/cloudinary";
 import { ToolRepository } from "../repositories/tool-repository";
+import { TrashService } from "./trash-service";
+import { TrashRepository } from "../repositories/trash-repository";
 const getSortOrderByType = (type: string) => {
   const sortOrderMap: Record<string, number> = {
     language: 1,
@@ -155,10 +157,20 @@ export class ToolService {
 
   static async softDelete(id: number) {
     const data = await ToolRepository.findNotDeleted(id);
+
     if (!data || data.deleted_at) {
       throw new ResponseError(404, "Data Tidak Ditemukan");
     }
+
     await ToolRepository.softDelete(id);
+
+    await TrashRepository.createLog({
+      entity_id: String(data.id),
+      entity_type: "tool",
+      title: TrashService.getTrashTitle("tool", data),
+      subtitle: TrashService.getTrashSubtitle("tool", data),
+      image_url: TrashService.getTrashImage("tool", data),
+    });
   }
 
   static async restoreData(id: number) {

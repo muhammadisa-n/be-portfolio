@@ -15,6 +15,8 @@ import { uploadImageProjects } from "../utils/upload";
 import { UploadedFile } from "express-fileupload";
 import { cloudinary } from "../config/cloudinary";
 import { ProjectRepository } from "../repositories/project-repository";
+import { TrashService } from "./trash-service";
+import { TrashRepository } from "../repositories/trash-repository";
 export class ProjectService {
   static async create(
     request: CreateProjectRequest,
@@ -122,6 +124,13 @@ export class ProjectService {
       throw new ResponseError(404, "Data Tidak Ditemukan");
     }
     await ProjectRepository.softDelete(id);
+    await TrashRepository.createLog({
+      entity_id: String(data.id),
+      entity_type: "project",
+      title: TrashService.getTrashTitle("project", data),
+      subtitle: TrashService.getTrashSubtitle("project", data),
+      image_url: TrashService.getTrashImage("project", data),
+    });
   }
 
   static async restoreData(id: number) {

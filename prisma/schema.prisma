@@ -117,3 +117,24 @@ model File {
 
   @@map("files")
 }
+
+enum TrashEntityType {
+  user
+  tool
+  project
+  message
+  file
+}
+
+model TrashLog {
+  id          Int             @id @default(autoincrement())
+  entity_id   String          @db.VarChar(100)
+  entity_type TrashEntityType
+  title       String          @db.VarChar(150)
+  subtitle    String?         @db.VarChar(255)
+  image_url   String?         @db.VarChar(300)
+  deleted_at  DateTime        @default(now()) @db.Timestamp(0)
+
+  @@unique([entity_id, entity_type])
+  @@map("trash_logs")
+}
