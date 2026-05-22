@@ -19,6 +19,13 @@ fileRouter.get(
   asyncHandler(authMiddleware),
   FileController.download
 );
+
+fileRouter.patch(
+  "/api/files/:id/delete",
+  asyncHandler(authMiddleware),
+  asyncHandler(apiKeyMiddleware),
+  FileController.softDelete
+);
 fileRouter.post(
   "/api/files/upload",
   asyncHandler(apiKeyMiddleware),

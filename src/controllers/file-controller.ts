@@ -3,6 +3,7 @@ import { FileService } from "../services/file-service";
 import {
   errorResponse,
   successCreateResponse,
+  successDeleteResponse,
   successResponse,
 } from "../utils/response";
 import { UploadedFile } from "express-fileupload";
@@ -90,6 +91,7 @@ export class FileController {
       next(error);
     }
   }
+
   static async publicCheck(
     req: Request,
     res: Response,
@@ -107,6 +109,16 @@ export class FileController {
       );
     } catch (error) {
       next(error);
+    }
+  }
+
+  static async softDelete(req: Request, res: Response, next: NextFunction) {
+    try {
+      const id = req.params.id;
+      await FileService.softDelete(Number(id));
+      res.status(200).json(successDeleteResponse());
+    } catch (e) {
+      next(e);
     }
   }
 }

@@ -50,7 +50,7 @@ export class AuthService {
       }
     );
 
-    const accessTokenExpiresIn = env.NODE_ENV === "production" ? "15s" : "5m";
+    const accessTokenExpiresIn = env.NODE_ENV === "production" ? "5m" : "5m";
     const accessToken = jwt.sign(
       {
         user_id: userExits.id,
@@ -152,7 +152,7 @@ export class AuthService {
         user_fullName: user.fullName,
         user_email: user.email,
       };
-      const accessTokenExpiresIn = env.NODE_ENV === "production" ? "15s" : "5m";
+      const accessTokenExpiresIn = env.NODE_ENV === "production" ? "5m" : "5m";
       const accessToken = jwt.sign(payload, env.JWT_SECRET as string, {
         expiresIn: accessTokenExpiresIn,
       });

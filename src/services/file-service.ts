@@ -12,6 +12,8 @@ import {
   deleteCloudinaryRawFile,
   validatePdfFile,
 } from "../utils/upload";
+import { TrashRepository } from "../repositories/trash-repository";
+import { TrashService } from "./trash-service";
 export class FileService {
   static async getAll(request: ListFileRequest): Promise<listResponse> {
     const requestList = Validation.validate(FileValidation.LIST, request);
@@ -87,5 +89,23 @@ export class FileService {
     }
 
     return response;
+  }
+
+  static async softDelete(id: number) {
+    const data = await FileRepository.findNotDeleted(id);
+
+    if (!data || data.deleted_at) {
+      throw new ResponseError(404, "Data Tidak Ditemukan");
+    }
+
+    await FileRepository.softDelete(id);
+
+    await TrashRepository.createLog({
+      entity_id: String(data.id),
+      entity_type: "tool",
+      title: TrashService.getTrashTitle("tool", data),
+      subtitle: TrashService.getTrashSubtitle("tool", data),
+      image_url: TrashService.getTrashImage("tool", data),
+    });
   }
 }

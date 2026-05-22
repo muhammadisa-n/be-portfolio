@@ -73,4 +73,19 @@ export class FileRepository {
       where: { id },
     });
   }
+  static async findNotDeleted(id: number) {
+    return prismaClient.tool.findFirst({
+      where: {
+        id,
+        deleted_at: null,
+      },
+    });
+  }
+
+  static async softDelete(id: number) {
+    return prismaClient.tool.update({
+      where: { id },
+      data: { deleted_at: new Date() },
+    });
+  }
 }
