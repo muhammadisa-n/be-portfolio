@@ -35,6 +35,7 @@ export const translationSections = {
       "contactf2",
       "contactf3",
       "contactf4",
+      "contactf5",
       "contactp1",
       "contactsweetalertMsgSuccess",
       "contactServerError",
