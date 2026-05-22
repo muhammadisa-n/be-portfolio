@@ -54,14 +54,6 @@ export const deleteCloudinaryFile = async (publicId?: string | null) => {
   await cloudinary.uploader.destroy(publicId);
 };
 
-export const deleteCloudinaryRawFile = async (publicId?: string | null) => {
-  if (!publicId) return;
-
-  await cloudinary.uploader.destroy(publicId, {
-    resource_type: "raw",
-  });
-};
-
 export const validatePdfFile = (file: UploadedFile) => {
   const allowedTypes = ["application/pdf"];
   const maxSize = 10 * 1024 * 1024;

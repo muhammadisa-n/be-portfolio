@@ -104,6 +104,11 @@ enum FileVersion {
   ENGLISH
 }
 
+enum Type {
+  CV_RESUME
+  HERO_IMAGE
+}
+
 model File {
   id         Int          @id @default(autoincrement())
   filename   String       @db.VarChar(100)
@@ -111,6 +116,7 @@ model File {
   file_url   String       @db.VarChar(300)
   mimetype   String       @db.VarChar(300)
   version    FileVersion? @unique
+  type       Type?
   created_at DateTime     @default(now()) @db.Timestamp(0)
   updated_at DateTime     @updatedAt @db.Timestamp(0)
   deleted_at DateTime?    @db.Timestamp(0)

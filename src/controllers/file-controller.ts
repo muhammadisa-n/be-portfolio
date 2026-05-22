@@ -7,8 +7,8 @@ import {
   successResponse,
 } from "../utils/response";
 import { UploadedFile } from "express-fileupload";
-import { ListFileRequest } from "../dtos/file-dto";
-import { FileVersion } from "@prisma/client";
+import { CreateFileRequest, ListFileRequest } from "../dtos/file-dto";
+import { FileVersion, Type } from "@prisma/client";
 import axios from "axios";
 export class FileController {
   static async getAll(req: Request, res: Response, next: NextFunction) {
@@ -29,10 +29,14 @@ export class FileController {
       next(e);
     }
   }
+
   static async upload(req: Request, res: Response, next: NextFunction) {
     try {
       const file = req.files?.file;
-      const version = req.body.version as FileVersion;
+      const request: CreateFileRequest = {
+        type: req.body.type as Type,
+        version: req.body.version as FileVersion | undefined,
+      };
 
       if (!file) {
         res.status(400).json(errorResponse("File Belum Diupload", 400));
@@ -43,7 +47,7 @@ export class FileController {
 
       const response = await FileService.upload(
         fileUpload as UploadedFile,
-        version
+        request
       );
 
       res.status(200).json(successCreateResponse(response));
@@ -119,6 +123,24 @@ export class FileController {
       res.status(200).json(successDeleteResponse());
     } catch (e) {
       next(e);
+    }
+  }
+  static async getHeroImage(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
+    try {
+      const type = "HERO_IMAGE" as Type;
+
+      const file = await FileService.getFileByType(type);
+      res.status(200).json(
+        successResponse("File tersedia", 200, {
+          url: file,
+        })
+      );
+    } catch (error) {
+      next(error);
     }
   }
 }

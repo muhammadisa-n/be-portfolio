@@ -2,15 +2,16 @@ import { UploadedFile } from "express-fileupload";
 import { FileRepository } from "../repositories/file-repository";
 import path from "path";
 import { ResponseError } from "../utils/response-error";
-import { ListFileRequest } from "../dtos/file-dto";
+import { CreateFileRequest, ListFileRequest } from "../dtos/file-dto";
 import { listResponse, tolistResponse } from "../dtos/list-dto";
 import { Validation } from "../utils/validation";
 import { FileValidation } from "../validations/file-validation";
-import { FileVersion } from "@prisma/client";
+import { FileVersion, Type } from "@prisma/client";
 import {
   uploadFile,
-  deleteCloudinaryRawFile,
   validatePdfFile,
+  validateImageFile,
+  deleteCloudinaryFile,
 } from "../utils/upload";
 import { TrashRepository } from "../repositories/trash-repository";
 import { TrashService } from "./trash-service";
@@ -45,36 +46,72 @@ export class FileService {
 
     return tolistResponse(result);
   }
-  static async upload(file: UploadedFile, version: FileVersion) {
-    if (!version || !["INDONESIA", "ENGLISH"].includes(version)) {
-      throw new ResponseError(400, "Version tidak valid");
-    }
-    validatePdfFile(file);
-
+  static async getFileByType(type: Type) {
+    const data = await FileRepository.findByType(type);
+    return data?.file_url;
+  }
+  static async upload(file: UploadedFile, request: CreateFileRequest) {
+    const createRequest = Validation.validate(FileValidation.CREATE, request);
     const filename = path.parse(file.name).name;
-    const extension = path.extname(file.name);
     const mimetype = file.mimetype;
-    const uploadResult = await uploadFile(file);
-    const existingFile = await FileRepository.findByVersion(version);
+    if (createRequest.type === Type.CV_RESUME) {
+      if (!createRequest.version) {
+        throw new ResponseError(400, "Version wajib diisi untuk CV");
+      }
 
-    if (existingFile) {
-      await deleteCloudinaryRawFile(existingFile.file_id);
+      validatePdfFile(file);
 
-      return FileRepository.updateByVersion(version, {
+      const uploadResult = await uploadFile(file);
+      const existingFile = await FileRepository.findByVersion(
+        createRequest.version
+      );
+
+      if (existingFile) {
+        await deleteCloudinaryFile(existingFile.file_id);
+
+        return FileRepository.updateByVersion(createRequest.version, {
+          filename,
+          mimetype,
+          file_id: uploadResult.public_id,
+          file_url: uploadResult.secure_url,
+        });
+      }
+
+      return FileRepository.create({
         filename,
         mimetype,
         file_id: uploadResult.public_id,
         file_url: uploadResult.secure_url,
+        version: request.version,
+        type: request.type,
       });
     }
+    if (createRequest.type === Type.HERO_IMAGE) {
+      validateImageFile(file);
+      const uploadResult = await uploadFile(file);
+      const existingFile = await FileRepository.findByType(Type.HERO_IMAGE);
 
-    return FileRepository.create({
-      filename,
-      mimetype,
-      file_id: uploadResult.public_id,
-      file_url: uploadResult.secure_url,
-      version,
-    });
+      if (existingFile) {
+        await deleteCloudinaryFile(existingFile.file_id);
+        await FileRepository.updateByType(Type.HERO_IMAGE, {
+          filename,
+          mimetype,
+          file_id: uploadResult.public_id,
+          file_url: uploadResult.secure_url,
+        });
+
+        return FileRepository.findByType(Type.HERO_IMAGE);
+      }
+
+      return FileRepository.create({
+        filename,
+        mimetype,
+        file_id: uploadResult.public_id,
+        file_url: uploadResult.secure_url,
+        type: request.type,
+        version: null,
+      });
+    }
   }
 
   static async download(version: FileVersion) {
@@ -102,10 +139,10 @@ export class FileService {
 
     await TrashRepository.createLog({
       entity_id: String(data.id),
-      entity_type: "tool",
-      title: TrashService.getTrashTitle("tool", data),
-      subtitle: TrashService.getTrashSubtitle("tool", data),
-      image_url: TrashService.getTrashImage("tool", data),
+      entity_type: "file",
+      title: TrashService.getTrashTitle("file", data),
+      subtitle: TrashService.getTrashSubtitle("file", data),
+      image_url: TrashService.getTrashImage("file", data),
     });
   }
 }

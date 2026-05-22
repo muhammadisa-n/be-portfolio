@@ -6,7 +6,7 @@ import {
 } from "../dtos/trash-dto";
 import { TrashRepository } from "../repositories/trash-repository";
 import { ResponseError } from "../utils/response-error";
-import { cloudinary } from "../config/cloudinary";
+import { deleteCloudinaryFile } from "../utils/upload";
 
 export class TrashService {
   static async getAll(request: ListTrashRequest) {
@@ -138,13 +138,11 @@ export class TrashService {
   static async deleteAssetIfExists(type: TrashType, data: any) {
     try {
       if (["user", "tool", "project"].includes(type) && data.image_id) {
-        await cloudinary.uploader.destroy(data.image_id);
+        await deleteCloudinaryFile(data.image_id);
       }
 
       if (type === "file" && data.file_id) {
-        await cloudinary.uploader.destroy(data.file_id, {
-          resource_type: "raw",
-        });
+        await deleteCloudinaryFile(data.file_id);
       }
     } catch (error) {
       console.error("Gagal hapus asset Cloudinary:", error);

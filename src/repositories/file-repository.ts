@@ -1,11 +1,39 @@
-import { FileVersion } from "@prisma/client";
+import { FileVersion, Type } from "@prisma/client";
 import { prismaClient } from "../config/database";
 
 export class FileRepository {
+  static async findByType(type: Type) {
+    return prismaClient.file.findFirst({
+      where: {
+        type,
+        deleted_at: null,
+      },
+    });
+  }
+
+  static async updateByType(
+    type: Type,
+    data: {
+      filename: string;
+      mimetype: string;
+      file_id: string;
+      file_url: string;
+    }
+  ) {
+    return prismaClient.file.updateMany({
+      where: {
+        type,
+        deleted_at: null,
+      },
+      data,
+    });
+  }
+
   static async findByVersion(version: FileVersion) {
     return prismaClient.file.findUnique({
       where: {
         version,
+        deleted_at: null,
       },
     });
   }
@@ -29,14 +57,7 @@ export class FileRepository {
       data,
     });
   }
-  static async findById(id: number) {
-    return await prismaClient.file.findFirst({
-      where: {
-        id: id,
-        deleted_at: null,
-      },
-    });
-  }
+
   static async findMany(filters: any, skip: number, take: number) {
     return prismaClient.file.findMany({
       where: {
@@ -57,24 +78,8 @@ export class FileRepository {
     });
   }
 
-  static async findByIdx(id: number) {
-    return prismaClient.file.findUnique({ where: { id } });
-  }
-
-  static async update(id: number, data: any, tool_ids?: number[]) {
-    return await prismaClient.file.update({
-      where: { id },
-      data,
-    });
-  }
-
-  static async Delete(id: number) {
-    return await prismaClient.file.delete({
-      where: { id },
-    });
-  }
   static async findNotDeleted(id: number) {
-    return prismaClient.tool.findFirst({
+    return prismaClient.file.findFirst({
       where: {
         id,
         deleted_at: null,
@@ -83,7 +88,7 @@ export class FileRepository {
   }
 
   static async softDelete(id: number) {
-    return prismaClient.tool.update({
+    return prismaClient.file.update({
       where: { id },
       data: { deleted_at: new Date() },
     });

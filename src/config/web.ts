@@ -7,7 +7,6 @@ import cookieParser from "cookie-parser";
 import { errorMiddleware } from "../middleware/error-middleware";
 import { httpLogger } from "../middleware/http-logger-middleware";
 import { errorResponse } from "../utils/response";
-import { setupSwagger } from "./swagger";
 import { mainRouter } from "../routes/main-route";
 import fileUpload from "express-fileupload";
 import { env } from "./env";
@@ -20,6 +19,7 @@ export const web = express();
 // web.set("layout", "layouts/main");
 
 // Middleware
+web.set("trust proxy", 1);
 web.use(express.json());
 web.use(cookieParser());
 web.use(

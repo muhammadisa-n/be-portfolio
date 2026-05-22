@@ -1,5 +1,9 @@
-import { File } from "@prisma/client";
+import { File, Type, FileVersion } from "@prisma/client";
 
+export type CreateFileRequest = {
+  type: Type;
+  version?: FileVersion;
+};
 export type ListFileRequest = {
   page: number;
   take: number;
@@ -14,6 +18,7 @@ export type FileResponse = {
   file_url: string;
   mimetype: string;
   version?: string;
+  type?: string;
   created_at: Date;
   updated_at: Date;
   deleted_at?: Date;
@@ -27,6 +32,7 @@ export function toFileResponse(file: File): FileResponse {
     file_url: file.file_url,
     mimetype: file.mimetype,
     version: file.version!,
+    type: file.type!,
     created_at: file.created_at,
     updated_at: file.updated_at,
     deleted_at: file.deleted_at!,
