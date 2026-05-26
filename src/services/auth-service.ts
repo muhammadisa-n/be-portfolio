@@ -4,7 +4,6 @@ import {
   UserDetailResponse,
   UserResponse,
   loginRequest,
-  CreateUserRequest,
   UpdateUserRequest,
 } from "../dtos/user-dto";
 import { ResponseError } from "../utils/response-error";
@@ -44,7 +43,7 @@ export class AuthService {
         user_fullName: userExits.fullName,
         user_email: userExits.email,
       },
-      env.JWT_SECRET as string,
+      env.JWT_SECRET_REFRESH as string,
       {
         expiresIn: "1d",
       }
@@ -57,7 +56,7 @@ export class AuthService {
         user_fullName: userExits.fullName,
         user_email: userExits.email,
       },
-      env.JWT_SECRET as string,
+      env.JWT_SECRET_ACCESS as string,
       {
         expiresIn: accessTokenExpiresIn,
       }
@@ -121,7 +120,7 @@ export class AuthService {
   }
 
   static async logout(req: UserRequest) {
-    const refreshToken = req.cookies.refresh_token;
+    const refreshToken = req.cookies["__Host-pf_rt"];
     if (!req.user) {
       throw new ResponseError(401, "Unauthorized: Anda Belum Login.");
     }
@@ -132,13 +131,16 @@ export class AuthService {
   }
 
   static async refreshToken(req: Request) {
-    const refreshToken = req.cookies.refresh_token;
+    const refreshToken = req.cookies["__Host-pf_rt"];
     if (!refreshToken) {
       throw new ResponseError(401, "Unauthorized, Anda Belum Login");
     }
 
     try {
-      const decoded = jwt.verify(refreshToken, env.JWT_SECRET as string) as any;
+      const decoded = jwt.verify(
+        refreshToken,
+        env.JWT_SECRET_REFRESH as string
+      ) as any;
 
       const user = await prismaClient.user.findUnique({
         where: { id: decoded.user_id },
@@ -153,7 +155,7 @@ export class AuthService {
         user_email: user.email,
       };
       const accessTokenExpiresIn = env.NODE_ENV === "production" ? "5m" : "5m";
-      const accessToken = jwt.sign(payload, env.JWT_SECRET as string, {
+      const accessToken = jwt.sign(payload, env.JWT_SECRET_ACCESS as string, {
         expiresIn: accessTokenExpiresIn,
       });
       return { accessToken, user: payload };

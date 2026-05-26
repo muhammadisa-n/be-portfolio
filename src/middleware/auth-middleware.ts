@@ -19,7 +19,7 @@ export const authMiddleware = async (
   }
   let payload;
   try {
-    payload = jwt.verify(token, env.JWT_SECRET as string) as {
+    payload = jwt.verify(token, env.JWT_SECRET_ACCESS as string) as {
       user_id: string;
       user_email: string;
       user_fullName: string;

@@ -8,8 +8,10 @@ async function startServer() {
     if (
       !env.APP_SECRET ||
       env.APP_SECRET.trim() === "" ||
-      !env.JWT_SECRET ||
-      env.JWT_SECRET.trim() === ""
+      !env.JWT_SECRET_ACCESS ||
+      env.JWT_SECRET_ACCESS.trim() === "" ||
+      !env.JWT_SECRET_REFRESH ||
+      env.JWT_SECRET_REFRESH.trim() === ""
     ) {
       logger.error("❌ APP_SECRET or JWT_SECRET is missing in your .env file.");
       logger.error("👉 Please run `node craft key:generate` to create them.");

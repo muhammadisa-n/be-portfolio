@@ -1,10 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { loginRequest, UpdateUserRequest } from "../dtos/user-dto";
-import {
-  errorResponse,
-  successResponse,
-  successUpdateResponse,
-} from "../utils/response";
+import { successResponse, successUpdateResponse } from "../utils/response";
 import { AuthService } from "../services/auth-service";
 import { UserRequest } from "../types/type-request";
 import { env } from "../config/env";
@@ -16,7 +12,7 @@ export class AuthController {
     try {
       const request: loginRequest = req.body as loginRequest;
       const response = await AuthService.login(request);
-      res.cookie("refresh_token", response.refreshToken, {
+      res.cookie("__Host-pf_rt", response.refreshToken, {
         httpOnly: true,
         maxAge: 24 * 60 * 60 * 1000,
         secure: env.NODE_ENV === "production",
@@ -70,7 +66,12 @@ export class AuthController {
 
   static async logout(req: UserRequest, res: Response, next: NextFunction) {
     await AuthService.logout(req);
-    res.clearCookie("refresh_token");
+    res.clearCookie("__Host-pf_rt", {
+      httpOnly: true,
+      secure: env.NODE_ENV === "production",
+      sameSite: "lax",
+      path: "/",
+    });
     res.status(200).json(successResponse("Logout berhasil", 200));
   }
   static async refreshToken(req: Request, res: Response, next: NextFunction) {

@@ -35,7 +35,8 @@ const envSchema = z.object({
       }
     ),
   PORT: z.coerce.number().default(3000),
-  JWT_SECRET: z.string(),
+  JWT_SECRET_ACCESS: z.string(),
+  JWT_SECRET_REFRESH: z.string(),
   APP_KEY: z.string(),
   CLOUDINARY_CLOUD_NAME: z.string().optional(),
   CLOUDINARY_API_KEY: z.string().optional(),

@@ -1,6 +1,5 @@
 import express from "express";
 import { authRouter } from "./auth-route";
-import { userRouter } from "./user-route";
 import { toolRouter } from "./tool-route";
 import { projectRouter } from "./project-route";
 import { messageRouter } from "./message-route";
@@ -38,7 +37,6 @@ mainRouter.get("/api", (req, res) => {
     .end();
 });
 mainRouter.use(authRouter);
-mainRouter.use(userRouter);
 mainRouter.use(toolRouter);
 mainRouter.use(projectRouter);
 mainRouter.use(messageRouter);

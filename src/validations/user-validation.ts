@@ -1,69 +1,6 @@
 import { z, ZodType } from "zod";
 
 export class UserValidation {
-  static readonly REGISTER: ZodType = z.object({
-    fullName: z.preprocess(
-      (v) => (v === null ? undefined : v),
-      z
-        .string({
-          required_error: "Nama Lengkap Wajib Diisi",
-        })
-        .min(1, { message: "Nama Lengkap Tidak Boleh Kosong" })
-        .max(100, { message: "Nama Lengkap Maksimal 100 Karakter" })
-    ),
-    email: z.preprocess(
-      (v) => (v === null ? undefined : v),
-      z
-        .string({
-          required_error: "Email Wajib Diisi",
-        })
-        .min(1, { message: "Email Tidak Boleh Kosong" })
-        .max(100, { message: "Email Maksimal 100 Karakter" })
-        .email({ message: "Format Email Tidak Valid" })
-    ),
-    password: z.preprocess(
-      (v) => (v === null ? undefined : v),
-      z
-        .string({
-          required_error: "Kata Sandi Wajib Diisi",
-        })
-        .min(8, { message: "Kata Sandi Minimal 8 Karakter" })
-        .max(100, { message: "Kata Sandi Maksimal 100 Karakter" })
-    ),
-    as: z.string().optional(),
-  });
-
-  static readonly CREATE: ZodType = z.object({
-    fullName: z.preprocess(
-      (v) => (v === null ? undefined : v),
-      z
-        .string({
-          required_error: "Nama Lengkap Wajib Diisi",
-        })
-        .min(1, { message: "Nama Lengkap Tidak Boleh Kosong" })
-        .max(100, { message: "Nama Lengkap Maksimal 100 Karakter" })
-    ),
-    email: z.preprocess(
-      (v) => (v === null ? undefined : v),
-      z
-        .string({
-          required_error: "Email Wajib Diisi",
-        })
-        .min(1, { message: "Email Tidak Boleh Kosong" })
-        .max(100, { message: "Email Maksimal 100 Karakter" })
-        .email({ message: "Format email tidak valid" })
-    ),
-    password: z.preprocess(
-      (v) => (v === null ? undefined : v),
-      z
-        .string({
-          required_error: "Kata Sandi Wajib Diisi",
-        })
-        .min(8, { message: "Kata Sandi Minimal 8 Karakter" })
-        .max(100, { message: "Kata Sandi Maksimal 100 Karakter" })
-    ),
-  });
-
   static readonly LOGIN: ZodType = z.object({
     email: z.preprocess(
       (v) => (v === null ? undefined : v),
