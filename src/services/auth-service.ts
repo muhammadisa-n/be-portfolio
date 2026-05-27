@@ -120,7 +120,8 @@ export class AuthService {
   }
 
   static async logout(req: UserRequest) {
-    const refreshToken = req.cookies["__Host-pf_rt"];
+    const cookieName = env.NODE_ENV === "production" ? "__Host-pf_rt" : "pf_rt";
+    const refreshToken = req.cookies[cookieName];
     if (!req.user) {
       throw new ResponseError(401, "Unauthorized: Anda Belum Login.");
     }
@@ -131,7 +132,8 @@ export class AuthService {
   }
 
   static async refreshToken(req: Request) {
-    const refreshToken = req.cookies["__Host-pf_rt"];
+    const cookieName = env.NODE_ENV === "production" ? "__Host-pf_rt" : "pf_rt";
+    const refreshToken = req.cookies[cookieName];
     if (!refreshToken) {
       throw new ResponseError(401, "Unauthorized, Anda Belum Login");
     }

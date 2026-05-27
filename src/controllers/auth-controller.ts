@@ -12,7 +12,9 @@ export class AuthController {
     try {
       const request: loginRequest = req.body as loginRequest;
       const response = await AuthService.login(request);
-      res.cookie("__Host-pf_rt", response.refreshToken, {
+      const cookieName =
+        env.NODE_ENV === "production" ? "__Host-pf_rt" : "pf_rt";
+      res.cookie(cookieName, response.refreshToken, {
         httpOnly: true,
         maxAge: 24 * 60 * 60 * 1000,
         secure: env.NODE_ENV === "production",
@@ -66,7 +68,8 @@ export class AuthController {
 
   static async logout(req: UserRequest, res: Response, next: NextFunction) {
     await AuthService.logout(req);
-    res.clearCookie("__Host-pf_rt", {
+    const cookieName = env.NODE_ENV === "production" ? "__Host-pf_rt" : "pf_rt";
+    res.clearCookie(cookieName, {
       httpOnly: true,
       secure: env.NODE_ENV === "production",
       sameSite: "lax",
