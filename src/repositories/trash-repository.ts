@@ -83,6 +83,20 @@ export class TrashRepository {
   }
 
   static async findDeletedEntity(type: TrashType, id: string) {
+    if (type === "project") {
+      return prismaClient.project.findFirst({
+        where: {
+          id: Number(id),
+          deleted_at: {
+            not: null,
+          },
+        },
+        include: {
+          images: true,
+        },
+      });
+    }
+
     const delegate = this.getDelegate(type);
 
     return delegate.findFirst({

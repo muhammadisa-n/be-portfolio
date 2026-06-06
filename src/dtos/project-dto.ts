@@ -1,4 +1,4 @@
-import { Prisma, Project } from "@prisma/client";
+import { Prisma } from "@prisma/client";
 
 export type CreateProjectRequest = {
   name_en: string;
@@ -7,7 +7,6 @@ export type CreateProjectRequest = {
   description_id?: string;
   demo_url: string;
   project_url: string;
-  dad?: number;
   tool_ids: number[];
 };
 
@@ -18,7 +17,6 @@ export type UpdateProjectRequest = {
   description_id?: string;
   demo_url?: string;
   project_url?: string;
-  dad?: number;
   tool_ids?: number[];
 };
 
@@ -29,15 +27,20 @@ export type ListProjectRequest = {
   name?: string;
 };
 
+export type ProjectImageResponse = {
+  id: number;
+  project_id: number;
+  image_id: string;
+  image_url: string;
+  sort_order: number | null;
+};
+
 export type projectDetailResponse = {
   id: number;
   name: string;
   description: string;
-  image_id: string;
-  image_url: string;
   demo_url: string;
   project_url: string;
-  dad: number;
   created_at: Date;
   updated_at: Date;
   deleted_at: Date;
@@ -51,20 +54,20 @@ export type projectDetailResponse = {
       sort_order: number | null;
     };
   }[];
+  images?: ProjectImageResponse[];
 };
 export type ProjectResponse = {
   id: number;
   name: string;
   description: string;
-  image_id: string;
-  image_url: string;
   demo_url: string;
   project_url: string;
-  dad: number;
+  images?: ProjectImageResponse[];
 };
 
 type ProjectWithTools = Prisma.ProjectGetPayload<{
   include: {
+    images: true;
     project_has_tool: {
       include: {
         tool: {
@@ -86,26 +89,27 @@ export function toProjectDetailResponse(
     id: project.id,
     name: project.name,
     description: project.description,
-    image_id: project.image_id,
-    image_url: project.image_url,
     demo_url: project.demo_url,
     project_url: project.project_url,
-    dad: project.dad!,
     created_at: project.created_at,
     updated_at: project.updated_at,
     deleted_at: project.deleted_at!,
     project_has_tool: project.project_has_tool || [],
+    images: project.images || [],
   };
 }
-export function toProjectResponse(project: Project): ProjectResponse {
+type ProjectWithImages = Prisma.ProjectGetPayload<{
+  include: {
+    images: true;
+  };
+}>;
+export function toProjectResponse(project: ProjectWithImages): ProjectResponse {
   return {
     id: project.id,
     name: project.name,
     description: project.description,
-    image_id: project.image_id,
-    image_url: project.image_url,
     demo_url: project.demo_url,
     project_url: project.project_url,
-    dad: project.dad!,
+    images: project.images || [],
   };
 }

@@ -5,7 +5,6 @@ export type CreateToolRequest = {
   description: string;
   tool_url: string;
   type: string;
-  dad?: number;
   show?: boolean;
 };
 
@@ -15,7 +14,6 @@ export type UpdateToolRequest = {
   tool_url?: string;
   type?: string;
   show?: boolean;
-  dad?: number;
 };
 
 export type ListToolRequest = {
@@ -31,7 +29,6 @@ export type ToolDetailResponse = {
   description: string;
   image_id: string;
   image_url: string;
-  dad: number;
   type?: string;
   sort_order?: number;
   show?: boolean;
@@ -46,7 +43,6 @@ export type ToolResponse = {
   description: string;
   image_id: string;
   image_url: string;
-  dad: number;
   type?: string;
   sort_order?: number;
   show?: boolean;
@@ -59,7 +55,6 @@ export function toToolDetailResponse(tool: Tool): ToolDetailResponse {
     description: tool.description,
     image_id: tool.image_id,
     image_url: tool.image_url,
-    dad: tool.dad!,
     type: tool.type!,
     sort_order: tool.sort_order!,
     show: tool.show!,
@@ -75,7 +70,6 @@ export function toToolResponse(tool: Tool): ToolResponse {
     description: tool.description,
     image_id: tool.image_id,
     image_url: tool.image_url,
-    dad: tool.dad!,
     type: tool.type!,
     sort_order: tool.sort_order!,
     show: tool.show!,

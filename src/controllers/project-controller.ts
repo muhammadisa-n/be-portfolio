@@ -27,22 +27,30 @@ export class ProjectController {
         description_id: req.body.description_id,
         demo_url: req.body.demo_url,
         project_url: req.body.project_url,
-        dad: req.body.dad,
         tool_ids: JSON.parse(req.body.tool_ids),
       };
 
-      const file = req.files?.image;
-      if (!file) {
+      const files = req.files?.images;
+
+      if (!files) {
         res.status(400).json(errorResponse("Image Belum Diupload", 400));
+        return;
       }
-      const image = Array.isArray(file) ? file[0] : file;
-      validateImageFile(image!);
+
+      const images = Array.isArray(files) ? files : [files];
+
+      images.forEach((image) => validateImageFile(image));
+
       const response = await ProjectService.create(
         request,
-        image as UploadedFile
+        images as UploadedFile[]
       );
-      fs.unlink(image!.tempFilePath, (err) => {
-        if (err) console.error("Gagal Hapus File Temp", err);
+      images.forEach((image) => {
+        if (image.tempFilePath) {
+          fs.unlink(image.tempFilePath, (err) => {
+            if (err) console.error("Gagal Hapus File Temp", err);
+          });
+        }
       });
       res.status(201).json(successCreateResponse(response));
     } catch (error) {
@@ -88,20 +96,25 @@ export class ProjectController {
         description_id: req.body.description_id,
         demo_url: req.body.demo_url,
         project_url: req.body.project_url,
-        dad: req.body.dad,
         tool_ids: JSON.parse(req.body.tool_ids),
       };
-      const file = req.files?.image;
-      const image = Array.isArray(file) ? file[0] : file;
+      const files = req.files?.images;
+      const images = files ? (Array.isArray(files) ? files : [files]) : [];
 
-      if (image) {
-        validateImageFile(image);
-      }
+      images.forEach((image) => validateImageFile(image));
+
       const response = await ProjectService.update(
         request,
         Number(req.params.id),
-        image as UploadedFile
+        images as UploadedFile[]
       );
+      images.forEach((image) => {
+        if (image.tempFilePath) {
+          fs.unlink(image.tempFilePath, (err) => {
+            if (err) console.error("Gagal Hapus File Temp", err);
+          });
+        }
+      });
       res.status(200).json(successUpdateResponse(response));
     } catch (error) {
       next(error);

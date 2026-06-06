@@ -130,14 +130,32 @@ export class TrashService {
   static getTrashImage(type: TrashType, data: any) {
     if (type === "user") return data.image_url;
     if (type === "tool") return data.image_url;
-    if (type === "project") return data.image_url;
+
+    if (type === "project") {
+      return data.images?.[0]?.image_url || null;
+    }
+
     if (type === "file") return data.file_url;
 
     return null;
   }
   static async deleteAssetIfExists(type: TrashType, data: any) {
     try {
-      if (["user", "tool", "project"].includes(type) && data.image_id) {
+      if (type === "project") {
+        if (Array.isArray(data.images) && data.images.length > 0) {
+          for (const image of data.images) {
+            if (image.image_id) {
+              await deleteCloudinaryFile(image.image_id);
+            }
+          }
+        } else if (data.image_id) {
+          await deleteCloudinaryFile(data.image_id);
+        }
+
+        return;
+      }
+
+      if (["user", "tool"].includes(type) && data.image_id) {
         await deleteCloudinaryFile(data.image_id);
       }
 

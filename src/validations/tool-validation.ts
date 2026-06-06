@@ -33,13 +33,6 @@ export class ToolValidation {
         })
         .min(1, { message: "Tool Url Tidak Boleh Kosong" })
     ),
-    dad: z
-      .preprocess((val) => {
-        if (val === "" || val === undefined || val === null) return null;
-        const parsed = Number(val);
-        return isNaN(parsed) ? val : parsed;
-      }, z.number().nullable())
-      .optional(),
     type: z.preprocess((v) => (v === null ? undefined : v), ToolTypeEnum),
     show: z.boolean().optional(),
   });
@@ -47,13 +40,6 @@ export class ToolValidation {
     name: z.string().optional(),
     description: z.string().optional(),
     tool_url: z.string().optional(),
-    dad: z
-      .preprocess((val) => {
-        if (val === "" || val === undefined || val === null) return null;
-        const parsed = Number(val);
-        return isNaN(parsed) ? val : parsed;
-      }, z.number().nullable())
-      .optional(),
     type: ToolTypeEnum.optional(),
     show: z.boolean().optional(),
   });

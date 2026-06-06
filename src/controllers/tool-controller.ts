@@ -24,7 +24,6 @@ export class ToolController {
         name: req.body.name,
         description: req.body.description,
         tool_url: req.body.tool_url,
-        dad: req.body.dad,
         type: req.body.type,
         show: req.body.show,
       };
@@ -98,7 +97,6 @@ export class ToolController {
         name: req.body.name,
         description: req.body.description,
         tool_url: req.body.tool_url,
-        dad: req.body.dad,
         type: req.body.type,
       };
       const file = req.files?.image;

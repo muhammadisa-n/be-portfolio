@@ -60,13 +60,6 @@ export class ProjectValidation {
         })
         .min(1, { message: "Project Url Tidak Boleh Kosong" })
     ),
-    dad: z
-      .preprocess((val) => {
-        if (val === "" || val === undefined || val === null) return null;
-        const parsed = Number(val);
-        return isNaN(parsed) ? val : parsed;
-      }, z.number().nullable())
-      .optional(),
     tool_ids: z.preprocess(
       (val) => {
         if (typeof val === "string") {
@@ -91,13 +84,6 @@ export class ProjectValidation {
     tool_url: z.string().optional(),
     demo_url: z.string().optional(),
     project_url: z.string().optional(),
-    dad: z
-      .preprocess((val) => {
-        if (val === "" || val === undefined || val === null) return null;
-        const parsed = Number(val);
-        return isNaN(parsed) ? val : parsed;
-      }, z.number().nullable())
-      .optional(),
     tool_ids: z
       .preprocess(
         (val) => {

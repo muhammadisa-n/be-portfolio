@@ -165,7 +165,6 @@ async function main() {
   //       image_url:
   //         "https://res.cloudinary.com/dahdvag/image/upload/v1778693965/portfolio/tools-images/a39yz9z1q6figc6vyonv.png",
   //       tool_url: "https://developer.mozilla.org/en-US/docs/Web/JavaScript",
-  //       dad: 100,
   //       sort_order: 1,
   //       type: "language",
   //       show: true,
@@ -177,7 +176,6 @@ async function main() {
   //       image_url:
   //         "https://res.cloudinary.com/dahdvag/image/upload/v1778693965/portfolio/tools-images/o8g3mmg7qmec3mufim5c.png",
   //       tool_url: "https://www.php.net/",
-  //       dad: 200,
   //       sort_order: 1,
   //       type: "language",
   //       show: true,
@@ -189,7 +187,6 @@ async function main() {
   //       image_url:
   //         "https://res.cloudinary.com/dahdvag/image/upload/v1778743850/portfolio/tools-images/edznrjbcjumm9fqubvkd.png",
   //       tool_url: "https://www.python.org/",
-  //       dad: 300,
   //       sort_order: 1,
   //       type: "language",
   //       show: true,
@@ -202,7 +199,6 @@ async function main() {
   //         "https://res.cloudinary.com/dahdvag/image/upload/v1778693965/portfolio/tools-images/g4q0uruew8lqegi7kxzl.png",
   //       tool_url:
   //         "https://developer.mozilla.org/en-US/docs/Glossary/TypeScript",
-  //       dad: 400,
   //       sort_order: 1,
   //       type: "language",
   //       show: true,
@@ -214,7 +210,6 @@ async function main() {
   //       image_url:
   //         "https://res.cloudinary.com/dahdvag/image/upload/v1778693965/portfolio/tools-images/kcgbw9muancivohovtco.png",
   //       tool_url: "https://nodejs.org/",
-  //       dad: 500,
   //       sort_order: 2,
   //       type: "runtime",
   //       show: true,
@@ -226,7 +221,6 @@ async function main() {
   //       image_url:
   //         "https://res.cloudinary.com/dahdvag/image/upload/v1778693965/portfolio/tools-images/gsiy2v2gm9lobjpbknks.png",
   //       tool_url: "https://adonisjs.com/",
-  //       dad: 600,
   //       sort_order: 3,
   //       type: "framework",
   //       show: true,
@@ -238,7 +232,6 @@ async function main() {
   //       image_url:
   //         "https://res.cloudinary.com/dahdvag/image/upload/v1778693965/portfolio/tools-images/ab6soit5zjeardmpxhfz.png",
   //       tool_url: "http://getbootstrap.com/",
-  //       dad: 700,
   //       sort_order: 3,
   //       type: "framework",
   //       show: true,
@@ -250,7 +243,6 @@ async function main() {
   //       image_url:
   //         "https://res.cloudinary.com/dahdvag/image/upload/v1778693965/portfolio/tools-images/w9cunrneeb3frqesu2nt.png",
   //       tool_url: "https://codeigniter.com/",
-  //       dad: 800,
   //       sort_order: 3,
   //       type: "framework",
   //       show: true,
@@ -262,7 +254,6 @@ async function main() {
   //       image_url:
   //         "https://res.cloudinary.com/dahdvag/image/upload/v1778693965/portfolio/tools-images/slfx0iwmm1s76fcpwa1p.png",
   //       tool_url: "https://expressjs.com/",
-  //       dad: 100,
   //       sort_order: 3,
   //       type: "framework",
   //       show: true,
@@ -274,7 +265,6 @@ async function main() {
   //       image_url:
   //         "https://res.cloudinary.com/dahdvag/image/upload/v1778743906/portfolio/tools-images/aebvanhonlyuppdewxto.png",
   //       tool_url: "https://flask.palletsprojects.com/en/stable/",
-  //       dad: 200,
   //       sort_order: 3,
   //       type: "framework",
   //       show: true,
@@ -286,7 +276,6 @@ async function main() {
   //       image_url:
   //         "https://res.cloudinary.com/dahdvag/image/upload/v1778744167/portfolio/tools-images/ged9grbdwfigqm9pjvix.png",
   //       tool_url: "hhttps://flutter.dev/",
-  //       dad: 300,
   //       sort_order: 3,
   //       type: "framework",
   //       show: false,
@@ -298,7 +287,6 @@ async function main() {
   //       image_url:
   //         "https://res.cloudinary.com/dahdvag/image/upload/v1778693965/portfolio/tools-images/gbavl7ljdul1rsokgzqk.png",
   //       tool_url: "https://laravel.com/",
-  //       dad: 400,
   //       sort_order: 3,
   //       type: "framework",
   //       show: true,
@@ -310,7 +298,6 @@ async function main() {
   //       image_url:
   //         "https://res.cloudinary.com/dahdvag/image/upload/v1778744043/portfolio/tools-images/vomprnwyguckzloqnkny.png",
   //       tool_url: "https://nestjs.com/",
-  //       dad: 500,
   //       sort_order: 3,
   //       type: "framework",
   //       show: false,
@@ -322,7 +309,6 @@ async function main() {
   //       image_url:
   //         "https://res.cloudinary.com/dahdvag/image/upload/v1778695270/portfolio/tools-images/mxerrthgz0htfyqwbtjr.png",
   //       tool_url: "http://nextjs.org/",
-  //       dad: 600,
   //       sort_order: 3,
   //       type: "framework",
   //       show: true,
@@ -334,7 +320,6 @@ async function main() {
   //       image_url:
   //         "https://res.cloudinary.com/dahdvag/image/upload/v1778744449/portfolio/tools-images/gwahpcpz0fzst45lxipp.png",
   //       tool_url: "https://nuxt.com/",
-  //       dad: 700,
   //       sort_order: 3,
   //       type: "framework",
   //       show: false,
@@ -346,7 +331,6 @@ async function main() {
   //       image_url:
   //         "https://res.cloudinary.com/dahdvag/image/upload/v1778693965/portfolio/tools-images/ly1uwsj5ygeatywlali0.png",
   //       tool_url: "https://react.dev/",
-  //       dad: 800,
   //       sort_order: 3,
   //       type: "framework",
   //       show: true,
@@ -358,7 +342,6 @@ async function main() {
   //       image_url:
   //         "https://res.cloudinary.com/dahdvag/image/upload/v1778693965/portfolio/tools-images/xfm62otrufulncmqppep.png",
   //       tool_url: "https://tailwindcss.com/",
-  //       dad: 100,
   //       sort_order: 3,
   //       type: "framework",
   //       show: true,
@@ -370,7 +353,6 @@ async function main() {
   //       image_url:
   //         "https://res.cloudinary.com/dahdvag/image/upload/v1778693965/portfolio/tools-images/xotwivbdiupwlqfmcb8d.png",
   //       tool_url: "https://vuejs.org/",
-  //       dad: 200,
   //       sort_order: 3,
   //       type: "framework",
   //       show: true,
@@ -382,7 +364,6 @@ async function main() {
   //       image_url:
   //         "https://res.cloudinary.com/dahdvag/image/upload/v1778744309/portfolio/tools-images/biwmzi6cugwwdtlju1bl.png",
   //       tool_url: "https://www.mongodb.com/",
-  //       dad: 300,
   //       sort_order: 4,
   //       type: "database",
   //       show: false,
@@ -394,7 +375,6 @@ async function main() {
   //       image_url:
   //         "https://res.cloudinary.com/dahdvag/image/upload/v1778693965/portfolio/tools-images/hlrctjuyyqishzjkgfn0.png",
   //       tool_url: "https://www.mysql.com/",
-  //       dad: 400,
   //     },
   //     {
   //       name: "Oracle",
@@ -403,7 +383,6 @@ async function main() {
   //       image_url:
   //         "https://res.cloudinary.com/dahdvag/image/upload/v1778744274/portfolio/tools-images/oqxohdlai06yho1ksbr9.png",
   //       tool_url: "https://www.oracle.com/asean/database/",
-  //       dad: 500,
   //       sort_order: 4,
   //       type: "database",
   //       show: true,
@@ -415,7 +394,6 @@ async function main() {
   //       image_url:
   //         "https://res.cloudinary.com/dahdvag/image/upload/v1778744243/portfolio/tools-images/xsbnjzucftzqkd4vjaww.png",
   //       tool_url: "https://www.postgresql.org/",
-  //       dad: 600,
   //       sort_order: 4,
   //       type: "database",
   //       show: false,
@@ -427,7 +405,6 @@ async function main() {
   //       image_url:
   //         "https://res.cloudinary.com/dahdvag/image/upload/v1778693965/portfolio/tools-images/jdc7qs3bggkxjzjdamwy.png",
   //       tool_url: "https://github.com/",
-  //       dad: 700,
   //       sort_order: 5,
   //       type: "tools",
   //       show: true,
@@ -439,7 +416,6 @@ async function main() {
   //       image_url:
   //         "https://res.cloudinary.com/dahdvag/image/upload/v1778746811/portfolio/tools-images/w7pt0jqkjbgicytbywht.png",
   //       tool_url: "https://gitlab.com/gitlab-com",
-  //       dad: 800,
   //       sort_order: 5,
   //       type: "tools",
   //       show: true,
@@ -451,7 +427,6 @@ async function main() {
   //       image_url:
   //         "https://res.cloudinary.com/dahdvag/image/upload/v1778744345/portfolio/tools-images/bpsoipznbpr4h3jta8tw.png",
   //       tool_url: "https://www.postman.com/",
-  //       dad: 700,
   //       sort_order: 5,
   //       type: "tools",
   //       show: true,
@@ -463,7 +438,6 @@ async function main() {
   //       image_url:
   //         "https://res.cloudinary.com/dahdvag/image/upload/v1778693965/portfolio/tools-images/ltxftr0f1oofbhx2ggwp.png",
   //       tool_url: "https://code.visualstudio.com/",
-  //       dad: 800,
   //       sort_order: 5,
   //       type: "tools",
   //       show: true,

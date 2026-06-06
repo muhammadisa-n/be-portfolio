@@ -20,10 +20,13 @@ import { TrashRepository } from "../repositories/trash-repository";
 export class ProjectService {
   static async create(
     request: CreateProjectRequest,
-    file: UploadedFile
+    files: UploadedFile[]
   ): Promise<ProjectResponse> {
     const data = Validation.validate(ProjectValidation.CREATE, request);
-    const imageUpload = await uploadImageProjects(file);
+    const uploadedImages = await Promise.all(
+      files.map((file) => uploadImageProjects(file))
+    );
+
     const response = await ProjectRepository.createWithTranslation({
       name_en: data.name_en,
       name_id: data.name_id,
@@ -31,11 +34,16 @@ export class ProjectService {
       description_id: data.description_id,
       demo_url: data.demo_url,
       project_url: data.project_url,
-      dad: data.dad,
-      image_id: imageUpload.public_id,
-      image_url: imageUpload.secure_url,
       tool_ids: data.tool_ids,
+      images: uploadedImages.map((image, index) => ({
+        image_id: image.public_id,
+        image_url: image.secure_url,
+        sort_order: index,
+      })),
     });
+    if (!response) {
+      throw new ResponseError(500, "Gagal Membuat Project");
+    }
     return toProjectResponse(response);
   }
 
@@ -81,7 +89,7 @@ export class ProjectService {
   static async update(
     request: UpdateProjectRequest,
     id: number,
-    file?: UploadedFile
+    files?: UploadedFile[]
   ): Promise<ProjectResponse> {
     const data = Validation.validate(ProjectValidation.UPDATE, request);
     const existingProject = await ProjectRepository.findById(id);
@@ -90,16 +98,30 @@ export class ProjectService {
       throw new ResponseError(404, "Data Tidak Ditemukan");
     }
 
-    let image_id = existingProject.image_id;
-    let image_url = existingProject.image_url;
+    let images:
+      | {
+          image_id: string;
+          image_url: string;
+          sort_order: number;
+        }[]
+      | undefined = undefined;
 
-    if (file) {
-      if (image_id) {
-        await cloudinary.uploader.destroy(image_id);
+    if (files && files.length > 0) {
+      for (const image of existingProject.images || []) {
+        await cloudinary.uploader.destroy(image.image_id);
       }
-      const imageUpload = await uploadImageProjects(file);
-      image_id = imageUpload.public_id;
-      image_url = imageUpload.secure_url;
+
+      const uploadedImages = await Promise.all(
+        files.map((file) => uploadImageProjects(file))
+      );
+
+      const mainImage = uploadedImages[0];
+
+      images = uploadedImages.map((image, index) => ({
+        image_id: image.public_id,
+        image_url: image.secure_url,
+        sort_order: index,
+      }));
     }
 
     const updated = await ProjectRepository.updateWithTransaction(id, {
@@ -109,12 +131,13 @@ export class ProjectService {
       description_id: data.description_id,
       demo_url: data.demo_url,
       project_url: data.project_url,
-      dad: data.dad,
-      image_id: image_id,
-      image_url: image_url,
       tool_ids: data.tool_ids,
+      images: images,
     });
 
+    if (!updated) {
+      throw new ResponseError(500, "Gagal Update Project");
+    }
     return toProjectResponse(updated);
   }
 

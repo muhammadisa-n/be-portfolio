@@ -24,10 +24,12 @@ export class ProjectRepository {
     description_id?: string;
     demo_url: string;
     project_url: string;
-    dad?: number;
     tool_ids: number[];
-    image_id: string;
-    image_url: string;
+    images?: {
+      image_id: string;
+      image_url: string;
+      sort_order: number;
+    }[];
   }) {
     return prismaClient.$transaction(async (tx) => {
       const createdProject = await tx.project.create({
@@ -36,9 +38,6 @@ export class ProjectRepository {
           description: "TEMP_DESCRIPTION",
           demo_url: data.demo_url,
           project_url: data.project_url,
-          dad: data.dad,
-          image_id: data.image_id,
-          image_url: data.image_url,
         },
       });
 
@@ -97,8 +96,53 @@ export class ProjectRepository {
           skipDuplicates: true,
         });
       }
+      if (data.images && data.images.length > 0) {
+        await tx.projectImage.createMany({
+          data: data.images.map((image) => ({
+            project_id: createdProject.id,
+            image_id: image.image_id,
+            image_url: image.image_url,
+            sort_order: image.sort_order,
+          })),
+        });
+      }
 
-      return updatedProject;
+      return tx.project.findUnique({
+        where: {
+          id: createdProject.id,
+        },
+        include: {
+          images: {
+            orderBy: {
+              sort_order: "asc",
+            },
+          },
+          project_has_tool: {
+            orderBy: [
+              {
+                tool: {
+                  sort_order: "asc",
+                },
+              },
+              {
+                tool: {
+                  name: "asc",
+                },
+              },
+            ],
+            include: {
+              tool: {
+                select: {
+                  name: true,
+                  tool_url: true,
+                  type: true,
+                  sort_order: true,
+                },
+              },
+            },
+          },
+        },
+      });
     });
   }
   static async findMany(filters: any, skip: number, take: number) {
@@ -113,6 +157,11 @@ export class ProjectRepository {
         updated_at: "desc",
       },
       include: {
+        images: {
+          orderBy: {
+            sort_order: "asc",
+          },
+        },
         project_has_tool: {
           orderBy: [
             {
@@ -161,6 +210,11 @@ export class ProjectRepository {
     return prismaClient.project.findUnique({
       where: { id },
       include: {
+        images: {
+          orderBy: {
+            sort_order: "asc",
+          },
+        },
         project_has_tool: {
           orderBy: [
             {
@@ -188,30 +242,6 @@ export class ProjectRepository {
       },
     });
   }
-
-  static async update(id: number, data: any, tool_ids?: number[]) {
-    const updatedProject = await prismaClient.project.update({
-      where: { id },
-      data,
-    });
-    if (tool_ids && Array.isArray(tool_ids)) {
-      await prismaClient.projectHasTool.deleteMany({
-        where: { project_id: id },
-      });
-      if (tool_ids.length > 0) {
-        await prismaClient.projectHasTool.createMany({
-          data: tool_ids.map((toolId) => ({
-            project_id: id,
-            tool_id: toolId,
-          })),
-          skipDuplicates: true,
-        });
-      }
-    }
-
-    return updatedProject;
-  }
-
   static async updateWithTransaction(
     id: number,
     data: {
@@ -221,10 +251,12 @@ export class ProjectRepository {
       description_id?: string;
       demo_url?: string;
       project_url?: string;
-      dad?: number | null;
-      image_id?: string;
-      image_url?: string;
       tool_ids?: number[];
+      images?: {
+        image_id: string;
+        image_url: string;
+        sort_order: number;
+      }[];
     }
   ) {
     return prismaClient.$transaction(
@@ -247,19 +279,7 @@ export class ProjectRepository {
           updateProjectData.project_url = data.project_url;
         }
 
-        if (data.dad !== undefined) {
-          updateProjectData.dad = data.dad;
-        }
-
-        if (data.image_id !== undefined) {
-          updateProjectData.image_id = data.image_id;
-        }
-
-        if (data.image_url !== undefined) {
-          updateProjectData.image_url = data.image_url;
-        }
-
-        const updatedProject = await tx.project.update({
+        await tx.project.update({
           where: { id },
           data: updateProjectData,
         });
@@ -361,13 +381,90 @@ export class ProjectRepository {
           }
         }
 
-        return updatedProject;
+        if (Array.isArray(data.images)) {
+          await tx.projectImage.deleteMany({
+            where: {
+              project_id: id,
+            },
+          });
+
+          if (data.images.length > 0) {
+            await tx.projectImage.createMany({
+              data: data.images.map((image) => ({
+                project_id: id,
+                image_id: image.image_id,
+                image_url: image.image_url,
+                sort_order: image.sort_order,
+              })),
+            });
+          }
+        }
+
+        return tx.project.findUnique({
+          where: {
+            id,
+          },
+          include: {
+            images: {
+              orderBy: {
+                sort_order: "asc",
+              },
+            },
+            project_has_tool: {
+              orderBy: [
+                {
+                  tool: {
+                    sort_order: "asc",
+                  },
+                },
+                {
+                  tool: {
+                    name: "asc",
+                  },
+                },
+              ],
+              include: {
+                tool: {
+                  select: {
+                    name: true,
+                    tool_url: true,
+                    type: true,
+                    sort_order: true,
+                  },
+                },
+              },
+            },
+          },
+        });
       },
       {
         timeout: 15000,
         maxWait: 10000,
       }
     );
+  }
+
+  static async update(id: number, data: any, tool_ids?: number[]) {
+    const updatedProject = await prismaClient.project.update({
+      where: { id },
+      data,
+    });
+    if (tool_ids && Array.isArray(tool_ids)) {
+      await prismaClient.projectHasTool.deleteMany({
+        where: { project_id: id },
+      });
+      if (tool_ids.length > 0) {
+        await prismaClient.projectHasTool.createMany({
+          data: tool_ids.map((toolId) => ({
+            project_id: id,
+            tool_id: toolId,
+          })),
+          skipDuplicates: true,
+        });
+      }
+    }
+
+    return updatedProject;
   }
 
   static async softDelete(id: number) {
@@ -402,6 +499,13 @@ export class ProjectRepository {
       where: {
         id,
         deleted_at: null,
+      },
+      include: {
+        images: {
+          orderBy: {
+            sort_order: "asc",
+          },
+        },
       },
     });
   }
