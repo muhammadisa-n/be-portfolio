@@ -139,7 +139,7 @@ export class ProjectRepository {
       skip,
       take,
       orderBy: {
-        updated_at: "desc",
+        created_at: "desc",
       },
       include: {
         images: {
