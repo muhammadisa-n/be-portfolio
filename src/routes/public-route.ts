@@ -9,7 +9,7 @@ import { rateLimitMiddleware } from "../middleware/rate-limit-middleware";
 export const publicRouter = express.Router();
 
 // Example routes:
-publicRouter.get("/api/public/projects", ProjectController.getAll);
+publicRouter.get("/api/public/projects", ProjectController.getAllPublic);
 publicRouter.get("/api/public/projects/count", ProjectController.count);
 publicRouter.get("/api/public/tools/", ToolController.getAllPublic);
 publicRouter.post(

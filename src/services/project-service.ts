@@ -34,8 +34,9 @@ export class ProjectService {
       name_id: data.name_id,
       description_en: data.description_en,
       description_id: data.description_id,
-      demo_url: data.demo_url!,
       project_url: data.project_url,
+      demo_url: data.demo_url!,
+      show: data.show!,
       tool_ids: data.tool_ids,
       images: uploadedImages.map((image, index) => ({
         image_id: image.public_id,
@@ -67,6 +68,39 @@ export class ProjectService {
     );
 
     const totalData = await ProjectRepository.count(filters);
+
+    const result = {
+      data,
+      total_data: totalData,
+      paging: {
+        current_page: requestList.page,
+        total_page: Math.ceil(totalData / requestList.take),
+      },
+    };
+
+    return tolistResponse(result);
+  }
+
+  static async getAllPublic(
+    request: ListProjectRequest
+  ): Promise<listResponse> {
+    const requestList = Validation.validate(ProjectValidation.LIST, request);
+    const filters: any[] = [];
+    if (requestList.name) {
+      filters.push({
+        name: {
+          contains: requestList.name,
+        },
+      });
+    }
+
+    const data = await ProjectRepository.findManyPublic(
+      filters,
+      requestList.skip,
+      requestList.take
+    );
+
+    const totalData = await ProjectRepository.countPublic(filters);
 
     const result = {
       data,
@@ -131,8 +165,9 @@ export class ProjectService {
       name_id: data.name_id,
       description_en: data.description_en,
       description_id: data.description_id,
-      demo_url: data.demo_url,
       project_url: data.project_url,
+      demo_url: data.demo_url,
+      show: data.show,
       tool_ids: data.tool_ids,
       images: images,
     });

@@ -97,6 +97,7 @@ export class ToolController {
         description: req.body.description,
         tool_url: req.body.tool_url,
         type: req.body.type,
+        show: req.body.show,
       };
       const file = req.files?.image;
       const image = Array.isArray(file) ? file[0] : file;

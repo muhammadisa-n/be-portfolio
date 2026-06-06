@@ -78,6 +78,7 @@ export class ProjectValidation {
         .array(z.number({ invalid_type_error: "Tool ID harus berupa angka" }))
         .min(1, { message: "Minimal 1 Tool harus dipilih" })
     ),
+    show: z.boolean().optional(),
   });
   static readonly UPDATE: ZodType = z.object({
     name_en: z.string().optional(),
@@ -105,6 +106,7 @@ export class ProjectValidation {
           .min(1, { message: "Minimal 1 Tool harus dipilih" })
       )
       .optional(),
+    show: z.boolean().optional(),
   });
   static readonly LIST: ZodType = z.object({
     page: z.number().min(1).positive(),

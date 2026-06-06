@@ -24,8 +24,9 @@ export class ProjectController {
         name_id: req.body.name_id,
         description_en: req.body.description_en,
         description_id: req.body.description_id,
-        demo_url: req.body.demo_url,
         project_url: req.body.project_url,
+        demo_url: req.body.demo_url,
+        show: req.body.show,
         tool_ids: JSON.parse(req.body.tool_ids),
       };
 
@@ -75,6 +76,24 @@ export class ProjectController {
       next(e);
     }
   }
+  static async getAllPublic(req: Request, res: Response, next: NextFunction) {
+    try {
+      const page = Number(req.query.page) || 1;
+      const take = Number(req.query.take) || 10;
+      const request: ListProjectRequest = {
+        page: page,
+        take: take,
+        skip: (page - 1) * take,
+        name: req.query.name as string,
+      };
+      const response = await ProjectService.getAllPublic(request);
+      res
+        .status(200)
+        .json(successResponse("Berhasil Get All Data", 200, response));
+    } catch (e) {
+      next(e);
+    }
+  }
   static async getOne(req: Request, res: Response, next: NextFunction) {
     try {
       const id = req.params.id;
@@ -93,8 +112,9 @@ export class ProjectController {
         name_id: req.body.name_id,
         description_en: req.body.description_en,
         description_id: req.body.description_id,
-        demo_url: req.body.demo_url,
         project_url: req.body.project_url,
+        demo_url: req.body.demo_url,
+        show: req.body.show,
         tool_ids: JSON.parse(req.body.tool_ids),
       };
       const files = req.files?.images;

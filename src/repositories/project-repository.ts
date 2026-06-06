@@ -7,8 +7,9 @@ export class ProjectRepository {
     description_en: string;
     name_id?: string;
     description_id?: string;
-    demo_url: string;
     project_url: string;
+    demo_url: string;
+    show?: boolean;
     tool_ids: number[];
     images?: {
       image_id: string;
@@ -23,6 +24,7 @@ export class ProjectRepository {
           description: "TEMP_DESCRIPTION",
           demo_url: data.demo_url,
           project_url: data.project_url,
+          show: data.show,
         },
       });
 
@@ -174,11 +176,65 @@ export class ProjectRepository {
       },
     });
   }
+  static async findManyPublic(filters: any, skip: number, take: number) {
+    return prismaClient.project.findMany({
+      where: {
+        AND: filters,
+        show: true,
+        deleted_at: null,
+      },
+      skip,
+      take,
+      orderBy: {
+        created_at: "desc",
+      },
+      include: {
+        images: {
+          orderBy: {
+            sort_order: "asc",
+          },
+        },
+        project_has_tool: {
+          orderBy: [
+            {
+              tool: {
+                sort_order: "asc",
+              },
+            },
+            {
+              tool: {
+                name: "asc",
+              },
+            },
+          ],
+          include: {
+            tool: {
+              select: {
+                name: true,
+                tool_url: true,
+                type: true,
+                sort_order: true,
+              },
+            },
+          },
+        },
+      },
+    });
+  }
 
   static async count(filters: any) {
     return prismaClient.project.count({
       where: {
         AND: filters,
+        deleted_at: null,
+      },
+    });
+  }
+  static async countPublic(filters: any) {
+    return prismaClient.project.count({
+      where: {
+        AND: filters,
+        show: true,
         deleted_at: null,
       },
     });
@@ -234,8 +290,9 @@ export class ProjectRepository {
       name_id?: string;
       description_en?: string;
       description_id?: string;
-      demo_url?: string;
       project_url?: string;
+      demo_url?: string;
+      show?: boolean;
       tool_ids?: number[];
       images?: {
         image_id: string;
@@ -256,12 +313,16 @@ export class ProjectRepository {
 
         const updateProjectData: any = {};
 
+        if (data.project_url !== undefined) {
+          updateProjectData.project_url = data.project_url;
+        }
+
         if (data.demo_url !== undefined) {
           updateProjectData.demo_url = data.demo_url;
         }
 
-        if (data.project_url !== undefined) {
-          updateProjectData.project_url = data.project_url;
+        if (data.show !== undefined) {
+          updateProjectData.show = data.show;
         }
 
         await tx.project.update({
