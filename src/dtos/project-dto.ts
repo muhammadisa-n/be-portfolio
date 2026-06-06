@@ -5,7 +5,7 @@ export type CreateProjectRequest = {
   name_id?: string;
   description_en: string;
   description_id?: string;
-  demo_url: string;
+  demo_url?: string;
   project_url: string;
   tool_ids: number[];
 };
@@ -39,7 +39,7 @@ export type projectDetailResponse = {
   id: number;
   name: string;
   description: string;
-  demo_url: string;
+  demo_url?: string;
   project_url: string;
   created_at: Date;
   updated_at: Date;
@@ -60,7 +60,7 @@ export type ProjectResponse = {
   id: number;
   name: string;
   description: string;
-  demo_url: string;
+  demo_url?: string;
   project_url: string;
   images?: ProjectImageResponse[];
 };
@@ -89,7 +89,7 @@ export function toProjectDetailResponse(
     id: project.id,
     name: project.name,
     description: project.description,
-    demo_url: project.demo_url,
+    demo_url: project.demo_url!,
     project_url: project.project_url,
     created_at: project.created_at,
     updated_at: project.updated_at,
@@ -108,7 +108,7 @@ export function toProjectResponse(project: ProjectWithImages): ProjectResponse {
     id: project.id,
     name: project.name,
     description: project.description,
-    demo_url: project.demo_url,
+    demo_url: project.demo_url!,
     project_url: project.project_url,
     images: project.images || [],
   };

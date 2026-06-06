@@ -34,7 +34,7 @@ export class ProjectService {
       name_id: data.name_id,
       description_en: data.description_en,
       description_id: data.description_id,
-      demo_url: data.demo_url,
+      demo_url: data.demo_url!,
       project_url: data.project_url,
       tool_ids: data.tool_ids,
       images: uploadedImages.map((image, index) => ({

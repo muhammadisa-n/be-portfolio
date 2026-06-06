@@ -3,7 +3,7 @@ CREATE TABLE `projects` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `name` VARCHAR(100) NOT NULL,
     `description` TEXT NOT NULL,
-    `demo_url` VARCHAR(100) NOT NULL,
+    `demo_url` VARCHAR(100) NULL,
     `project_url` VARCHAR(100) NOT NULL,
     `created_at` TIMESTAMP(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0),
     `updated_at` TIMESTAMP(0) NOT NULL,

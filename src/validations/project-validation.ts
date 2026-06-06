@@ -44,14 +44,17 @@ export class ProjectValidation {
       )
       .nullable()
       .optional(),
-    demo_url: z.preprocess(
-      (v) => (v === null ? undefined : v),
-      z
-        .string({
-          required_error: "Demo Url Wajib Diisi",
-        })
-        .min(1, { message: "Demo Url Tidak Boleh Kosong" })
-    ),
+    demo_url: z
+      .preprocess(
+        (v) => (v === null ? undefined : v),
+        z
+          .string({
+            required_error: "Demo Url Wajib Diisi",
+          })
+          .min(1, { message: "Demo Url Tidak Boleh Kosong" })
+      )
+      .nullable()
+      .optional(),
     project_url: z.preprocess(
       (v) => (v === null ? undefined : v),
       z
