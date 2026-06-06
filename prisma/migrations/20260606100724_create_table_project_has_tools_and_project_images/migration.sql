@@ -13,7 +13,6 @@ CREATE TABLE `project_images` (
     `image_id` VARCHAR(200) NOT NULL,
     `image_url` VARCHAR(300) NOT NULL,
     `sort_order` INTEGER NULL DEFAULT 0,
-    `created_at` TIMESTAMP(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0),
 
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;

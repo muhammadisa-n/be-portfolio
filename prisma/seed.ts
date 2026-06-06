@@ -9,9 +9,9 @@ const prisma = new PrismaClient();
 async function main() {
   await prisma.user.create({
     data: {
-      fullName: "Muhammad Isa Nuruddin",
-      email: "muhammadisa226@gmail.com",
-      password: await argon2.hash("muhammadisa2026"),
+      fullName: "User Test",
+      email: "tes@gmail.com",
+      password: await argon2.hash("123456"),
     },
   });
 
