@@ -17,6 +17,8 @@ import { cloudinary } from "../config/cloudinary";
 import { ProjectRepository } from "../repositories/project-repository";
 import { TrashService } from "./trash-service";
 import { TrashRepository } from "../repositories/trash-repository";
+import { ProjectImageRepository } from "../repositories/project-image-repository";
+import { SortProjectImageRequest } from "../dtos/project-image-dto";
 export class ProjectService {
   static async create(
     request: CreateProjectRequest,
@@ -178,5 +180,70 @@ export class ProjectService {
       throw new ResponseError(404, "Data Tidak Ditemukan");
     }
     return data;
+  }
+
+  static async deleteProjectImage(projectId: number, imageId: number) {
+    const image = await ProjectImageRepository.findImageById(
+      projectId,
+      imageId
+    );
+
+    if (!image) {
+      throw new ResponseError(404, "Image tidak ditemukan");
+    }
+
+    const count = await ProjectImageRepository.countProjectImages(projectId);
+
+    if (count <= 1) {
+      throw new ResponseError(400, "Project minimal harus memiliki 1 image");
+    }
+
+    await cloudinary.uploader.destroy(image.image_id);
+
+    await ProjectImageRepository.deleteImageById(projectId, imageId);
+
+    const remainingImages =
+      await ProjectImageRepository.findImagesByProjectId(projectId);
+
+    await ProjectImageRepository.updateImageSort(
+      projectId,
+      remainingImages.map((image, index) => ({
+        id: image.id,
+        sort_order: index,
+      }))
+    );
+  }
+
+  static async sortProjectImages(
+    projectId: number,
+    request: SortProjectImageRequest
+  ) {
+    if (!request.images || request.images.length === 0) {
+      throw new ResponseError(400, "Images tidak boleh kosong");
+    }
+
+    await ProjectImageRepository.updateImageSort(projectId, request.images);
+  }
+  static async addProjectImages(projectId: number, files: UploadedFile[]) {
+    const project = await ProjectRepository.findById(projectId);
+
+    if (!project) {
+      throw new ResponseError(404, "Project tidak ditemukan");
+    }
+    const existingCount =
+      await ProjectImageRepository.countProjectImages(projectId);
+
+    const uploadedImages = await Promise.all(
+      files.map((file) => uploadImageProjects(file))
+    );
+
+    await ProjectImageRepository.addImages(
+      projectId,
+      uploadedImages.map((image, index) => ({
+        image_id: image.public_id,
+        image_url: image.secure_url,
+        sort_order: existingCount + index,
+      }))
+    );
   }
 }

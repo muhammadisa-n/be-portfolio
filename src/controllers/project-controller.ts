@@ -155,4 +155,67 @@ export class ProjectController {
       next(e);
     }
   }
+  static async deleteProjectImage(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
+    try {
+      await ProjectService.deleteProjectImage(
+        Number(req.params.id),
+        Number(req.params.imageId)
+      );
+
+      res.status(200).json(successDeleteResponse());
+    } catch (error) {
+      next(error);
+    }
+  }
+  static async sortProjectImages(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
+    try {
+      await ProjectService.sortProjectImages(Number(req.params.id), req.body);
+
+      res.status(200).json(successUpdateResponse(null));
+    } catch (error) {
+      next(error);
+    }
+  }
+  static async addProjectImages(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
+    try {
+      const files = req.files?.images;
+      const images = files ? (Array.isArray(files) ? files : [files]) : [];
+
+      if (images.length === 0) {
+        res.status(400).json(errorResponse("Image belum diupload", 400));
+        return;
+      }
+
+      images.forEach((image) => validateImageFile(image));
+
+      await ProjectService.addProjectImages(
+        Number(req.params.id),
+        images as UploadedFile[]
+      );
+
+      images.forEach((image) => {
+        if (image.tempFilePath) {
+          fs.unlink(image.tempFilePath, (err) => {
+            if (err) console.error("Gagal Hapus File Temp", err);
+          });
+        }
+      });
+
+      res.status(201).json(successCreateResponse(null));
+    } catch (error) {
+      next(error);
+    }
+  }
 }

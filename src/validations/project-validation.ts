@@ -30,7 +30,7 @@ export class ProjectValidation {
           required_error: "Deskripsi Eng Wajib Diisi",
         })
         .min(1, { message: "Deskripsi  Eng Tidak Boleh Kosong" })
-        .max(100, { message: "Deskripsi Eng Maksimal 100 Karakter" })
+        .max(500, { message: "Deskripsi Eng Maksimal 100 Karakter" })
     ),
     description_id: z
       .preprocess(
@@ -40,7 +40,7 @@ export class ProjectValidation {
             required_error: "Deskripsi ID Wajib Diisi",
           })
           .min(1, { message: "Deskripsi ID Tidak Boleh Kosong" })
-          .max(100, { message: "Deskripsi ID Maksimal 100 Karakter" })
+          .max(500, { message: "Deskripsi ID Maksimal 100 Karakter" })
       )
       .nullable()
       .optional(),

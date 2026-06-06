@@ -57,3 +57,22 @@ projectRouter.delete(
   asyncHandler(authMiddleware),
   ProjectController.hardDelete
 );
+
+projectRouter.post(
+  "/api/projects/:id/images",
+  asyncHandler(apiKeyMiddleware),
+  asyncHandler(authMiddleware),
+  ProjectController.addProjectImages
+);
+projectRouter.patch(
+  "/api/projects/:id/images/sort",
+  asyncHandler(apiKeyMiddleware),
+  asyncHandler(authMiddleware),
+  ProjectController.sortProjectImages
+);
+projectRouter.delete(
+  "/api/projects/:id/images/:imageId",
+  asyncHandler(apiKeyMiddleware),
+  asyncHandler(authMiddleware),
+  ProjectController.deleteProjectImage
+);
