@@ -52,6 +52,16 @@ export class ToolRepository {
     });
   }
 
+  static async countPublic(filters: any) {
+    return prismaClient.tool.count({
+      where: {
+        AND: filters,
+        show: true,
+        deleted_at: null,
+      },
+    });
+  }
+
   static async findById(id: number) {
     return prismaClient.tool.findUnique({ where: { id } });
   }

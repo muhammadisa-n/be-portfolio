@@ -95,7 +95,7 @@ export class ToolService {
       requestList.take
     );
 
-    const totalData = await ToolRepository.count(filters);
+    const totalData = await ToolRepository.countPublic(filters);
 
     const result = {
       data,
