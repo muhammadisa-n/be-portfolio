@@ -124,24 +124,7 @@ export class ToolController {
       next(e);
     }
   }
-  static async restoreData(req: Request, res: Response, next: NextFunction) {
-    try {
-      const id = req.params.id;
-      await ToolService.restoreData(Number(id));
-      res.status(200).json(successRestoreResponse());
-    } catch (e) {
-      next(e);
-    }
-  }
-  static async hardDelete(req: Request, res: Response, next: NextFunction) {
-    try {
-      const id = req.params.id;
-      await ToolService.hardDelete(Number(id));
-      res.status(200).json(successDeleteResponse());
-    } catch (e) {
-      next(e);
-    }
-  }
+
   static async count(req: Request, res: Response, next: NextFunction) {
     try {
       const data = await ToolService.count();

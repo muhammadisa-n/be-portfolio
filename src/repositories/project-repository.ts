@@ -2,21 +2,6 @@ import { prismaClient } from "../config/database";
 import { ResponseError } from "../utils/response-error";
 
 export class ProjectRepository {
-  static async create(data: any, tool_ids: number[]) {
-    const createdProject = await prismaClient.project.create({ data });
-    if (tool_ids.length > 0) {
-      await prismaClient.projectHasTool.createMany({
-        data: tool_ids.map((toolId) => ({
-          project_id: createdProject.id,
-          tool_id: toolId,
-        })),
-        skipDuplicates: true,
-      });
-      return createdProject;
-    }
-
-    return createdProject;
-  }
   static async createWithTranslation(data: {
     name_en: string;
     description_en: string;
@@ -44,7 +29,7 @@ export class ProjectRepository {
       const nameKey = `projects.${createdProject.id}.name`;
       const descriptionKey = `projects.${createdProject.id}.description`;
 
-      const updatedProject = await tx.project.update({
+      await tx.project.update({
         where: {
           id: createdProject.id,
         },
@@ -444,53 +429,10 @@ export class ProjectRepository {
     );
   }
 
-  static async update(id: number, data: any, tool_ids?: number[]) {
-    const updatedProject = await prismaClient.project.update({
-      where: { id },
-      data,
-    });
-    if (tool_ids && Array.isArray(tool_ids)) {
-      await prismaClient.projectHasTool.deleteMany({
-        where: { project_id: id },
-      });
-      if (tool_ids.length > 0) {
-        await prismaClient.projectHasTool.createMany({
-          data: tool_ids.map((toolId) => ({
-            project_id: id,
-            tool_id: toolId,
-          })),
-          skipDuplicates: true,
-        });
-      }
-    }
-
-    return updatedProject;
-  }
-
   static async softDelete(id: number) {
     return prismaClient.project.update({
       where: { id },
       data: { deleted_at: new Date() },
-    });
-  }
-
-  static async restore(id: number) {
-    return prismaClient.project.update({
-      where: { id },
-      data: { deleted_at: null },
-    });
-  }
-
-  static async hardDelete(id: number) {
-    return prismaClient.project.delete({ where: { id } });
-  }
-
-  static async findDeleted(id: number) {
-    return prismaClient.project.findFirst({
-      where: {
-        id,
-        deleted_at: { not: null },
-      },
     });
   }
 

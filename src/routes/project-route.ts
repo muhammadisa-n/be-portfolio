@@ -39,23 +39,11 @@ projectRouter.put(
   asyncHandler(authMiddleware),
   ProjectController.update
 );
-projectRouter.patch(
+projectRouter.delete(
   "/api/projects/:id/delete",
   asyncHandler(apiKeyMiddleware),
   asyncHandler(authMiddleware),
   ProjectController.softDelete
-);
-projectRouter.patch(
-  "/api/projects/:id/restore",
-  asyncHandler(apiKeyMiddleware),
-  asyncHandler(authMiddleware),
-  ProjectController.restoreData
-);
-projectRouter.delete(
-  "/api/projects/:id",
-  asyncHandler(apiKeyMiddleware),
-  asyncHandler(authMiddleware),
-  ProjectController.hardDelete
 );
 
 projectRouter.post(

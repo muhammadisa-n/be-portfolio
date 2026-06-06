@@ -171,22 +171,6 @@ export class ToolService {
     });
   }
 
-  static async restoreData(id: number) {
-    const data = await ToolRepository.findDeleted(id);
-    if (!data) {
-      throw new ResponseError(404, "Data Tidak Ditemukan");
-    }
-    await ToolRepository.restore(id);
-  }
-
-  static async hardDelete(id: number) {
-    const data = await ToolRepository.findDeleted(id);
-    if (!data) {
-      throw new ResponseError(404, "Data Tidak Ditemukan");
-    }
-    await ToolRepository.hardDelete(id);
-  }
-
   static async count() {
     const data = await ToolRepository.countAll();
     if (!data) {

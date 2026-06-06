@@ -158,22 +158,6 @@ export class ProjectService {
     });
   }
 
-  static async restoreData(id: number) {
-    const data = await ProjectRepository.findDeleted(id);
-    if (!data) {
-      throw new ResponseError(404, "Data Tidak Ditemukan");
-    }
-    await ProjectRepository.restore(id);
-  }
-
-  static async hardDelete(id: number) {
-    const data = await ProjectRepository.findDeleted(id);
-    if (!data) {
-      throw new ResponseError(404, "Data Tidak Ditemukan");
-    }
-    await ProjectRepository.hardDelete(id);
-  }
-
   static async count() {
     const data = await ProjectRepository.countAll();
     if (!data) {

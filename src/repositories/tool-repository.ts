@@ -67,26 +67,6 @@ export class ToolRepository {
     });
   }
 
-  static async restore(id: number) {
-    return prismaClient.tool.update({
-      where: { id },
-      data: { deleted_at: null },
-    });
-  }
-
-  static async hardDelete(id: number) {
-    return prismaClient.tool.delete({ where: { id } });
-  }
-
-  static async findDeleted(id: number) {
-    return prismaClient.tool.findFirst({
-      where: {
-        id,
-        deleted_at: { not: null },
-      },
-    });
-  }
-
   static async findNotDeleted(id: number) {
     return prismaClient.tool.findFirst({
       where: {

@@ -42,21 +42,9 @@ toolRouter.put(
   asyncHandler(apiKeyMiddleware),
   ToolController.update
 );
-toolRouter.patch(
+toolRouter.delete(
   "/api/tools/:id/delete",
   asyncHandler(authMiddleware),
   asyncHandler(apiKeyMiddleware),
   ToolController.softDelete
-);
-toolRouter.patch(
-  "/api/tools/:id/restore",
-  asyncHandler(authMiddleware),
-  asyncHandler(apiKeyMiddleware),
-  ToolController.restoreData
-);
-toolRouter.delete(
-  "/api/tools/:id",
-  asyncHandler(authMiddleware),
-  asyncHandler(apiKeyMiddleware),
-  ToolController.hardDelete
 );
