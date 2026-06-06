@@ -42,7 +42,7 @@ export class ToolService {
       image_url: imageUpload.secure_url,
       type: data.type,
       sort_order: getSortOrderByType(data.type),
-      show: data.show ? data.show : true,
+      show: data.show,
     });
     return toToolResponse(response);
   }

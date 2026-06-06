@@ -321,7 +321,7 @@ export class ProjectRepository {
           updateProjectData.demo_url = data.demo_url;
         }
 
-        if (data.show !== undefined) {
+        if (data.show !== undefined || data.show !== null) {
           updateProjectData.show = data.show;
         }
 

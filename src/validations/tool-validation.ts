@@ -6,6 +6,13 @@ const ToolTypeEnum = z.enum([
   "database",
   "tools",
 ]);
+const booleanFromFormData = z.preprocess((value) => {
+  if (value === undefined || value === null || value === "") return undefined;
+  if (value === "true" || value === true) return true;
+  if (value === "false" || value === false) return false;
+
+  return value;
+}, z.boolean().optional());
 export class ToolValidation {
   static readonly CREATE: ZodType = z.object({
     name: z.preprocess(
@@ -34,14 +41,14 @@ export class ToolValidation {
         .min(1, { message: "Tool Url Tidak Boleh Kosong" })
     ),
     type: z.preprocess((v) => (v === null ? undefined : v), ToolTypeEnum),
-    show: z.boolean().optional(),
+    show: booleanFromFormData,
   });
   static readonly UPDATE: ZodType = z.object({
     name: z.string().optional(),
     description: z.string().optional(),
     tool_url: z.string().optional(),
     type: ToolTypeEnum.optional(),
-    show: z.boolean().optional(),
+    show: booleanFromFormData,
   });
   static readonly LIST: ZodType = z.object({
     page: z.number().min(1).positive(),

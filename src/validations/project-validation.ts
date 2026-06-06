@@ -1,5 +1,11 @@
 import { z, ZodType } from "zod";
+const booleanFromFormData = z.preprocess((value) => {
+  if (value === undefined || value === null || value === "") return undefined;
+  if (value === "true" || value === true) return true;
+  if (value === "false" || value === false) return false;
 
+  return value;
+}, z.boolean().optional());
 export class ProjectValidation {
   static readonly CREATE: ZodType = z.object({
     name_en: z.preprocess(
@@ -78,7 +84,7 @@ export class ProjectValidation {
         .array(z.number({ invalid_type_error: "Tool ID harus berupa angka" }))
         .min(1, { message: "Minimal 1 Tool harus dipilih" })
     ),
-    show: z.boolean().optional(),
+    show: booleanFromFormData,
   });
   static readonly UPDATE: ZodType = z.object({
     name_en: z.string().optional(),
@@ -106,7 +112,7 @@ export class ProjectValidation {
           .min(1, { message: "Minimal 1 Tool harus dipilih" })
       )
       .optional(),
-    show: z.boolean().optional(),
+    show: booleanFromFormData,
   });
   static readonly LIST: ZodType = z.object({
     page: z.number().min(1).positive(),
