@@ -64,4 +64,41 @@ export class TranslationRepository {
   static async countAll() {
     return prismaClient.translation.count();
   }
+  static async findProjectKeysByValue(keyword: string, language?: "en" | "id") {
+    return prismaClient.translation.findMany({
+      where: {
+        key: {
+          startsWith: "projects.",
+          endsWith: ".name",
+        },
+        ...(language
+          ? {
+              language,
+            }
+          : {}),
+        value: {
+          contains: keyword,
+        },
+      },
+      select: {
+        key: true,
+      },
+    });
+  }
+
+  static async findProjectNameTranslations(language: "en" | "id") {
+    return prismaClient.translation.findMany({
+      where: {
+        language,
+        key: {
+          startsWith: "projects.",
+          endsWith: ".name",
+        },
+      },
+      select: {
+        key: true,
+        value: true,
+      },
+    });
+  }
 }

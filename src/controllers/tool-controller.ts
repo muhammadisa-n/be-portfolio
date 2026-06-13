@@ -47,31 +47,38 @@ export class ToolController {
     try {
       const page = Number(req.query.page) || 1;
       const take = Number(req.query.take) || 10;
+
       const request: ListToolRequest = {
-        page: page,
-        take: take,
+        page,
+        take,
         skip: (page - 1) * take,
-        name: req.query.name as string,
+        name: req.query.name ? String(req.query.name) : undefined,
+        sortBy: req.query.sortBy
+          ? (String(req.query.sortBy) as
+              | "created_at"
+              | "name"
+              | "sort_order"
+              | "type")
+          : undefined,
+        sortOrder: req.query.sortOrder
+          ? (String(req.query.sortOrder) as "asc" | "desc")
+          : undefined,
+        type: req.query.type
+          ? (String(req.query.type) as
+              | "language"
+              | "runtime"
+              | "framework"
+              | "database"
+              | "tools")
+          : undefined,
+        show:
+          req.query.show !== undefined
+            ? String(req.query.show) === "true"
+            : undefined,
       };
+
       const response = await ToolService.getAll(request);
-      res
-        .status(200)
-        .json(successResponse("Berhasil Get All Data", 200, response));
-    } catch (e) {
-      next(e);
-    }
-  }
-  static async getAllPublic(req: Request, res: Response, next: NextFunction) {
-    try {
-      const page = Number(req.query.page) || 1;
-      const take = Number(req.query.take) || 10;
-      const request: ListToolRequest = {
-        page: page,
-        take: take,
-        skip: (page - 1) * take,
-        name: req.query.name as string,
-      };
-      const response = await ToolService.getAllPublic(request);
+
       res
         .status(200)
         .json(successResponse("Berhasil Get All Data", 200, response));

@@ -5,7 +5,29 @@ export class ToolRepository {
     return prismaClient.tool.create({ data });
   }
 
-  static async findMany(filters: any, skip: number, take: number) {
+  static async findMany(
+    filters: any[],
+    skip: number,
+    take: number,
+    sortBy?: "created_at" | "name" | "sort_order" | "type",
+    sortOrder?: "asc" | "desc"
+  ) {
+    let orderBy: any[];
+
+    if (!sortBy || !sortOrder) {
+      orderBy = [{ sort_order: "asc" }, { name: "asc" }];
+    } else if (sortBy === "sort_order") {
+      orderBy = [{ sort_order: sortOrder }, { name: "asc" }];
+    } else if (sortBy === "name") {
+      orderBy = [{ name: sortOrder }, { sort_order: "asc" }];
+    } else {
+      orderBy = [
+        { [sortBy]: sortOrder },
+        { sort_order: "asc" },
+        { name: "asc" },
+      ];
+    }
+
     return prismaClient.tool.findMany({
       where: {
         AND: filters,
@@ -13,33 +35,7 @@ export class ToolRepository {
       },
       skip,
       take,
-      orderBy: [
-        {
-          sort_order: "asc",
-        },
-        {
-          name: "asc",
-        },
-      ],
-    });
-  }
-  static async findManyPublic(filters: any, skip: number, take: number) {
-    return prismaClient.tool.findMany({
-      where: {
-        AND: filters,
-        deleted_at: null,
-        show: true,
-      },
-      skip,
-      take,
-      orderBy: [
-        {
-          sort_order: "asc",
-        },
-        {
-          name: "asc",
-        },
-      ],
+      orderBy,
     });
   }
 

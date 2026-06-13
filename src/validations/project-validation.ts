@@ -119,5 +119,9 @@ export class ProjectValidation {
     take: z.number().min(1).positive(),
     skip: z.number(),
     name: z.string().optional(),
+    language: z.enum(["en", "id"]).optional(),
+    sortBy: z.enum(["created_at", "name"]).optional(),
+    sortOrder: z.enum(["asc", "desc"]).optional(),
+    show: z.boolean().optional(),
   });
 }

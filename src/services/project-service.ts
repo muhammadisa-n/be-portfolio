@@ -19,6 +19,7 @@ import { TrashService } from "./trash-service";
 import { TrashRepository } from "../repositories/trash-repository";
 import { ProjectImageRepository } from "../repositories/project-image-repository";
 import { SortProjectImageRequest } from "../dtos/project-image-dto";
+import { TranslationRepository } from "../repositories/translation-repository";
 export class ProjectService {
   static async create(
     request: CreateProjectRequest,
@@ -54,53 +55,71 @@ export class ProjectService {
     const requestList = Validation.validate(ProjectValidation.LIST, request);
     const filters: any[] = [];
     if (requestList.name) {
+      const translations = await TranslationRepository.findProjectKeysByValue(
+        requestList.name,
+        requestList.language
+      );
+
+      const translationKeys = translations.map((item) => item.key);
+
       filters.push({
-        name: {
-          contains: requestList.name,
-        },
+        OR: [
+          {
+            name: {
+              contains: requestList.name,
+            },
+          },
+          {
+            name: {
+              in: translationKeys,
+            },
+          },
+        ],
+      });
+    }
+    if (requestList.show !== undefined) {
+      filters.push({
+        show: requestList.show,
       });
     }
 
-    const data = await ProjectRepository.findMany(
-      filters,
-      requestList.skip,
-      requestList.take
-    );
+    const sortBy = requestList.sortBy || "created_at";
+    const sortOrder = requestList.sortOrder || "desc";
+    const language = requestList.language || "en";
 
     const totalData = await ProjectRepository.count(filters);
 
-    const result = {
-      data,
-      total_data: totalData,
-      paging: {
-        current_page: requestList.page,
-        total_page: Math.ceil(totalData / requestList.take),
-      },
-    };
+    let data;
 
-    return tolistResponse(result);
-  }
+    if (sortBy === "name") {
+      const allProjects = await ProjectRepository.findAll(filters);
 
-  static async getAllPublic(
-    request: ListProjectRequest
-  ): Promise<listResponse> {
-    const requestList = Validation.validate(ProjectValidation.LIST, request);
-    const filters: any[] = [];
-    if (requestList.name) {
-      filters.push({
-        name: {
-          contains: requestList.name,
-        },
-      });
+      const translations =
+        await TranslationRepository.findProjectNameTranslations(language);
+
+      const translationMap = new Map(
+        translations.map((item) => [item.key, item.value])
+      );
+
+      data = allProjects
+        .sort((a, b) => {
+          const nameA = translationMap.get(a.name) || a.name;
+          const nameB = translationMap.get(b.name) || b.name;
+
+          return sortOrder === "asc"
+            ? nameA.localeCompare(nameB)
+            : nameB.localeCompare(nameA);
+        })
+        .slice(requestList.skip, requestList.skip + requestList.take);
+    } else {
+      data = await ProjectRepository.findMany(
+        filters,
+        requestList.skip,
+        requestList.take,
+        sortBy,
+        sortOrder
+      );
     }
-
-    const data = await ProjectRepository.findManyPublic(
-      filters,
-      requestList.skip,
-      requestList.take
-    );
-
-    const totalData = await ProjectRepository.countPublic(filters);
 
     const result = {
       data,

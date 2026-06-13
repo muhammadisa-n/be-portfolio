@@ -55,5 +55,11 @@ export class ToolValidation {
     take: z.number().min(1).positive(),
     skip: z.number(),
     name: z.string().optional(),
+    sortBy: z.enum(["created_at", "name", "sort_order", "type"]).optional(),
+    sortOrder: z.enum(["asc", "desc"]).optional(),
+    type: z
+      .enum(["language", "runtime", "framework", "database", "tools"])
+      .optional(),
+    show: z.boolean().optional(),
   });
 }

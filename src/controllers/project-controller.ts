@@ -66,27 +66,22 @@ export class ProjectController {
         page: page,
         take: take,
         skip: (page - 1) * take,
-        name: req.query.name as string,
+        name: req.query.name ? String(req.query.name) : undefined,
+        language: req.query.language
+          ? (String(req.query.language) as "en" | "id")
+          : undefined,
+        sortBy: req.query.sortBy
+          ? (String(req.query.sortBy) as "created_at" | "name")
+          : undefined,
+        sortOrder: req.query.sortOrder
+          ? (String(req.query.sortOrder) as "asc" | "desc")
+          : undefined,
+        show:
+          req.query.show !== undefined
+            ? String(req.query.show) === "true"
+            : undefined,
       };
       const response = await ProjectService.getAll(request);
-      res
-        .status(200)
-        .json(successResponse("Berhasil Get All Data", 200, response));
-    } catch (e) {
-      next(e);
-    }
-  }
-  static async getAllPublic(req: Request, res: Response, next: NextFunction) {
-    try {
-      const page = Number(req.query.page) || 1;
-      const take = Number(req.query.take) || 10;
-      const request: ListProjectRequest = {
-        page: page,
-        take: take,
-        skip: (page - 1) * take,
-        name: req.query.name as string,
-      };
-      const response = await ProjectService.getAllPublic(request);
       res
         .status(200)
         .json(successResponse("Berhasil Get All Data", 200, response));

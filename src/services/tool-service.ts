@@ -49,53 +49,38 @@ export class ToolService {
 
   static async getAll(request: ListToolRequest): Promise<listResponse> {
     const requestList = Validation.validate(ToolValidation.LIST, request);
+
     const filters: any[] = [];
+
     if (requestList.name) {
       filters.push({
         name: {
           contains: requestList.name,
         },
+      });
+    }
+
+    if (requestList.type) {
+      filters.push({
+        type: requestList.type,
+      });
+    }
+
+    if (requestList.show !== undefined) {
+      filters.push({
+        show: requestList.show,
       });
     }
 
     const data = await ToolRepository.findMany(
       filters,
       requestList.skip,
-      requestList.take
+      requestList.take,
+      requestList.sortBy,
+      requestList.sortOrder
     );
 
     const totalData = await ToolRepository.count(filters);
-
-    const result = {
-      data,
-      total_data: totalData,
-      paging: {
-        current_page: requestList.page,
-        total_page: Math.ceil(totalData / requestList.take),
-      },
-    };
-
-    return tolistResponse(result);
-  }
-
-  static async getAllPublic(request: ListToolRequest): Promise<listResponse> {
-    const requestList = Validation.validate(ToolValidation.LIST, request);
-    const filters: any[] = [];
-    if (requestList.name) {
-      filters.push({
-        name: {
-          contains: requestList.name,
-        },
-      });
-    }
-
-    const data = await ToolRepository.findManyPublic(
-      filters,
-      requestList.skip,
-      requestList.take
-    );
-
-    const totalData = await ToolRepository.countPublic(filters);
 
     const result = {
       data,

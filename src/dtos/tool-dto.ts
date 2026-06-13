@@ -21,6 +21,10 @@ export type ListToolRequest = {
   take: number;
   skip: number;
   name?: string;
+  sortBy?: "created_at" | "name" | "sort_order" | "type";
+  sortOrder?: "asc" | "desc";
+  type?: "language" | "runtime" | "framework" | "database" | "tools";
+  show?: boolean;
 };
 
 export type ToolDetailResponse = {

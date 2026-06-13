@@ -132,7 +132,13 @@ export class ProjectRepository {
       });
     });
   }
-  static async findMany(filters: any, skip: number, take: number) {
+  static async findMany(
+    filters: any,
+    skip: number,
+    take: number,
+    sortBy: "created_at" | "name" = "created_at",
+    sortOrder: "asc" | "desc" = "desc"
+  ) {
     return prismaClient.project.findMany({
       where: {
         AND: filters,
@@ -141,52 +147,7 @@ export class ProjectRepository {
       skip,
       take,
       orderBy: {
-        created_at: "desc",
-      },
-      include: {
-        images: {
-          orderBy: {
-            sort_order: "asc",
-          },
-        },
-        project_has_tool: {
-          orderBy: [
-            {
-              tool: {
-                sort_order: "asc",
-              },
-            },
-            {
-              tool: {
-                name: "asc",
-              },
-            },
-          ],
-          include: {
-            tool: {
-              select: {
-                name: true,
-                tool_url: true,
-                type: true,
-                sort_order: true,
-              },
-            },
-          },
-        },
-      },
-    });
-  }
-  static async findManyPublic(filters: any, skip: number, take: number) {
-    return prismaClient.project.findMany({
-      where: {
-        AND: filters,
-        show: true,
-        deleted_at: null,
-      },
-      skip,
-      take,
-      orderBy: {
-        created_at: "desc",
+        [sortBy]: sortOrder,
       },
       include: {
         images: {
@@ -507,6 +468,45 @@ export class ProjectRepository {
         images: {
           orderBy: {
             sort_order: "asc",
+          },
+        },
+      },
+    });
+  }
+  static async findAll(filters: any[]) {
+    return prismaClient.project.findMany({
+      where: {
+        AND: filters,
+        deleted_at: null,
+      },
+      include: {
+        images: {
+          orderBy: {
+            sort_order: "asc",
+          },
+        },
+        project_has_tool: {
+          orderBy: [
+            {
+              tool: {
+                sort_order: "asc",
+              },
+            },
+            {
+              tool: {
+                name: "asc",
+              },
+            },
+          ],
+          include: {
+            tool: {
+              select: {
+                name: true,
+                tool_url: true,
+                type: true,
+                sort_order: true,
+              },
+            },
           },
         },
       },

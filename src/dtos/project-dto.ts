@@ -27,6 +27,10 @@ export type ListProjectRequest = {
   take: number;
   skip: number;
   name?: string;
+  language?: "en" | "id";
+  sortBy?: "created_at" | "name";
+  sortOrder?: "asc" | "desc";
+  show?: boolean;
 };
 
 export type ProjectImageResponse = {
