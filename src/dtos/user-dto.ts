@@ -5,7 +5,7 @@ export type loginRequest = {
   remember_me?: boolean;
 };
 export type loginGoogleRequest = {
-  credential: string;
+  code: string;
   remember_me?: boolean;
 };
 export type CreateUserRequest = {

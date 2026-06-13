@@ -82,10 +82,27 @@ export class AuthService {
   static async loginWithGoogle(request: loginGoogleRequest) {
     const data = Validation.validate(UserValidation.LOGIN_GOOGLE, request);
 
-    const googleClient = new OAuth2Client(env.GOOGLE_CLIENT_ID);
+    const googleClient = new OAuth2Client(
+      env.GOOGLE_CLIENT_ID,
+      env.GOOGLE_CLIENT_SECRET,
+      "postmessage"
+    );
+
+    let tokens;
+
+    try {
+      const result = await googleClient.getToken(data.code);
+      tokens = result.tokens;
+    } catch {
+      throw new ResponseError(401, "Login Google tidak valid");
+    }
+
+    if (!tokens.id_token) {
+      throw new ResponseError(401, "Login Google tidak valid");
+    }
 
     const ticket = await googleClient.verifyIdToken({
-      idToken: data.credential,
+      idToken: tokens.id_token,
       audience: env.GOOGLE_CLIENT_ID,
     });
 

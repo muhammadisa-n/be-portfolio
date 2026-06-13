@@ -30,7 +30,7 @@ export class UserValidation {
   });
 
   static readonly LOGIN_GOOGLE: ZodType = z.object({
-    credential: z.preprocess(
+    code: z.preprocess(
       (v) => (v === null ? undefined : v),
       z
         .string({
