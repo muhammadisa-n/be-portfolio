@@ -46,6 +46,8 @@ const envSchema = z.object({
   MAIL_USER: z.string(),
   MAIL_PASS: z.string(),
   MAIL_FROM: z.string().optional(),
+  GOOGLE_CLIENT_ID: z.string().optional(),
+  ADMIN_EMAIL: z.string().optional(),
 });
 
 const _env = envSchema.safeParse(process.env);

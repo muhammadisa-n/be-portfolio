@@ -1,5 +1,11 @@
 import { z, ZodType } from "zod";
+const booleanFromFormData = z.preprocess((value) => {
+  if (value === undefined || value === null || value === "") return undefined;
+  if (value === "true" || value === true) return true;
+  if (value === "false" || value === false) return false;
 
+  return value;
+}, z.boolean().optional());
 export class UserValidation {
   static readonly LOGIN: ZodType = z.object({
     email: z.preprocess(
@@ -20,15 +26,19 @@ export class UserValidation {
         .min(1, { message: "Password Minimal 1 Karakter" })
         .max(100, { message: "Password Maksimal 100 Karakter" })
     ),
-    redirect_url: z.preprocess(
+    remember_me: booleanFromFormData,
+  });
+
+  static readonly LOGIN_GOOGLE: ZodType = z.object({
+    credential: z.preprocess(
       (v) => (v === null ? undefined : v),
       z
         .string({
-          required_error: "Redirect URL Wajib Diisi",
+          required_error: "Credential Wajib Diisi",
         })
-        .optional()
+        .min(1, { message: "Credential Minimal 1 Karakter" })
     ),
-    rememberMe: z.boolean().default(false).optional(),
+    remember_me: booleanFromFormData,
   });
 
   static readonly UPDATE: ZodType = z.object({

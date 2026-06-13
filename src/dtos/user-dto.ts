@@ -2,6 +2,11 @@ import { User } from "@prisma/client";
 export type loginRequest = {
   email: string;
   password: string;
+  remember_me?: boolean;
+};
+export type loginGoogleRequest = {
+  credential: string;
+  remember_me?: boolean;
 };
 export type CreateUserRequest = {
   fullName: string;

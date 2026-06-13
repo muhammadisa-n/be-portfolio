@@ -11,6 +11,12 @@ authRouter.post(
   asyncHandler(apiKeyMiddleware),
   AuthController.login
 );
+
+authRouter.post(
+  "/api/auth/login/google",
+  asyncHandler(apiKeyMiddleware),
+  AuthController.loginWithGoogle
+);
 authRouter.get(
   "/api/auth/me",
   asyncHandler(apiKeyMiddleware),

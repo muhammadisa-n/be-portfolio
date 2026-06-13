@@ -4,6 +4,7 @@ import {
   UserDetailResponse,
   UserResponse,
   loginRequest,
+  loginGoogleRequest,
   UpdateUserRequest,
 } from "../dtos/user-dto";
 import { ResponseError } from "../utils/response-error";
@@ -19,6 +20,7 @@ import { prismaClient } from "../config/database";
 import { env } from "../config/env";
 import { UploadedFile } from "express-fileupload";
 import { deleteCloudinaryFile, uploadFile } from "../utils/upload";
+import { OAuth2Client } from "google-auth-library";
 
 export class AuthService {
   static async login(request: loginRequest) {
@@ -29,6 +31,13 @@ export class AuthService {
       throw new ResponseError(401, "Gagal Login! Detail login salah");
     }
 
+    if (!userExits.password) {
+      throw new ResponseError(
+        401,
+        "Silakan masuk menggunakan akun Google yang terhubung."
+      );
+    }
+
     const isPasswordValid = await argon2.verify(
       userExits.password,
       data.password
@@ -36,7 +45,11 @@ export class AuthService {
     if (!isPasswordValid) {
       throw new ResponseError(401, "Gagal Login! Detail login salah");
     }
+    const refreshTokenExpiresIn = data.remember_me ? "30d" : "1d";
 
+    const refreshTokenMaxAge = data.remember_me
+      ? 30 * 24 * 60 * 60 * 1000
+      : 24 * 60 * 60 * 1000;
     const refreshToken = jwt.sign(
       {
         user_id: userExits.id,
@@ -45,7 +58,7 @@ export class AuthService {
       },
       env.JWT_SECRET_REFRESH as string,
       {
-        expiresIn: "1d",
+        expiresIn: refreshTokenExpiresIn,
       }
     );
 
@@ -63,9 +76,87 @@ export class AuthService {
     );
 
     const user = toUserResponse(userExits);
-    return { user, refreshToken, accessToken };
+    return { user, refreshToken, accessToken, refreshTokenMaxAge };
   }
 
+  static async loginWithGoogle(request: loginGoogleRequest) {
+    const data = Validation.validate(UserValidation.LOGIN_GOOGLE, request);
+
+    const googleClient = new OAuth2Client(env.GOOGLE_CLIENT_ID);
+
+    const ticket = await googleClient.verifyIdToken({
+      idToken: data.credential,
+      audience: env.GOOGLE_CLIENT_ID,
+    });
+
+    const payload = ticket.getPayload();
+
+    if (!payload) {
+      throw new ResponseError(401, "Google login tidak valid");
+    }
+
+    const email = payload.email;
+    const emailVerified = payload.email_verified;
+
+    if (!email || !emailVerified) {
+      throw new ResponseError(401, "Email Google belum terverifikasi");
+    }
+
+    if (email !== env.ADMIN_EMAIL) {
+      throw new ResponseError(
+        403,
+        "Maaf, akun yang digunakan tidak memiliki akses ke halaman ini."
+      );
+    }
+
+    let user = await UserRepository.findUserByEmail(email);
+
+    if (!user) {
+      user = await prismaClient.user.create({
+        data: {
+          fullName: payload.name || email,
+          email,
+          password: null,
+          image_url: payload.picture || null,
+        },
+      });
+    }
+    const refreshTokenExpiresIn = data.remember_me ? "30d" : "1d";
+
+    const refreshTokenMaxAge = data.remember_me
+      ? 30 * 24 * 60 * 60 * 1000
+      : 24 * 60 * 60 * 1000;
+    const refreshToken = jwt.sign(
+      {
+        user_id: user.id,
+        user_fullName: user.fullName,
+        user_email: user.email,
+      },
+      env.JWT_SECRET_REFRESH as string,
+      {
+        expiresIn: refreshTokenExpiresIn,
+      }
+    );
+
+    const accessToken = jwt.sign(
+      {
+        user_id: user.id,
+        user_fullName: user.fullName,
+        user_email: user.email,
+      },
+      env.JWT_SECRET_ACCESS as string,
+      {
+        expiresIn: "5m",
+      }
+    );
+
+    return {
+      user: toUserResponse(user),
+      refreshToken,
+      accessToken,
+      refreshTokenMaxAge,
+    };
+  }
   static async me(user: User): Promise<UserDetailResponse> {
     return toUserDetailResponse(user);
   }
